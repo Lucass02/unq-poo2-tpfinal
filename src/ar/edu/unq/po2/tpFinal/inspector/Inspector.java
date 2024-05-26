@@ -15,15 +15,15 @@ public class Inspector {
     }
 
     public void verificarEstacionamiento(String patente, Sem sem) {
-        boolean estacionamientoValido = sem.consultarEstacionamiento(patente);
-        if (!estacionamientoValido) {
-            registrarInfraccion(patente, sem);
-        }
+       // boolean estacionamientoValido = sem.consultarEstacionamiento(patente);
+       // if (!estacionamientoValido) {
+       //     registrarInfraccion(patente, sem);
+       // }
     }
 
     private void registrarInfraccion(String patente, Sem sem) {
         Infraccion infraccion = new Infraccion(patente, this);
-        sem.registrarInfraccion(infraccion);
+        //sem.registrarInfraccion(infraccion);
     }
 
 	public int getId() {

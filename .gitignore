@@ -1,1 +1,10 @@
 /bin/
+
+# Para ignorar archivos relacionados con la JDK
+jdk/
+
+# Para ignorar archivos relacionados con JUnit
+junit/
+
+# Para ignorar archivos relacionados con Mockito
+mockito/

@@ -1,4 +1,4 @@
-package ar.edu.unq.po2.tpFinal.usuario;
+package ar.edu.unq.po2.tpFinal.estacionamiento;
 
 import ar.edu.unq.po2.tpFinal.sem.Sem;
 
@@ -53,10 +53,6 @@ public class Usuario {
 
 	public void setCelular(String celular) {
 		this.celular = celular;
-	}
-
-	public double getCredito() {
-		return credito;
 	}
 
 	public void setCredito(double credito) {

@@ -68,10 +68,6 @@ public class Estacionamiento {
 		this.usuario = usuario;
 	}
 
-	public boolean isVigente() {
-		return vigente;
-	}
-
 	public void setVigente(boolean vigente) {
 		this.vigente = vigente;
 	}

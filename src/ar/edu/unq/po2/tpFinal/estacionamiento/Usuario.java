@@ -16,11 +16,11 @@ public class Usuario {
     }
 
     public void iniciarEstacionamiento(String patente, Sem sem) {
-        //sem.iniciarEstacionamiento(patente, this.celular);
+        sem.iniciarEstacionamiento(patente, this.celular);
     }
 
     public void finalizarEstacionamiento(String patente, Sem sem) {
-        //sem.finalizarEstacionamiento(patente, this.celular);
+        sem.finalizarEstacionamiento(patente, this.celular);
     }
 
     public double consultarSaldo() {

@@ -14,31 +14,44 @@ public class AppUsuario implements MovementSensor{
         this.estacionamientos = new ArrayList<Estacionamiento>();
     }
 
-    public void iniciarEstacionamiento(String patente, Sem sem) {
-        usuario.iniciarEstacionamiento(patente, sem);
+    public void agregarEstacionamiento(Estacionamiento estacionamiento) {
+        estacionamientos.add(estacionamiento);
     }
 
-    public void finalizarEstacionamiento(String patente, Sem sem) {
-        usuario.finalizarEstacionamiento(patente, sem);
+    public List<Estacionamiento> getEstacionamientos() {
+        return estacionamientos;
+    }
+
+    public void iniciarEstacionamiento(Vehiculo vehiculo, Sem sem) {
+        if (sem.consultarEstacionamiento(vehiculo.getPatente())) {
+            System.out.println("El vehículo ya tiene un estacionamiento activo.");
+        } else {
+            sem.iniciarEstacionamiento(vehiculo.getPatente(), usuario.getCelular());
+            Estacionamiento estacionamiento = new Estacionamiento(vehiculo, usuario);
+            agregarEstacionamiento(estacionamiento);
+            System.out.println("Estacionamiento iniciado para el vehículo con patente: " + vehiculo.getPatente());
+        }
+    }
+
+    public void finalizarEstacionamiento(Vehiculo vehiculo, Sem sem) {
+        if (sem.consultarEstacionamiento(vehiculo.getPatente())) {
+            sem.finalizarEstacionamiento(vehiculo.getPatente(), usuario.getCelular());
+            for (Estacionamiento e : estacionamientos) {
+                if (e.getVehiculo().getPatente().equals(vehiculo.getPatente()) && e.estaVigente()) {
+                    e.finalizarEstacionamiento();
+                    System.out.println("Estacionamiento finalizado para el vehículo con patente: " + vehiculo.getPatente());
+                    break;
+                }
+            }
+        } else {
+            System.out.println("No hay un estacionamiento activo para el vehículo con patente: " + vehiculo.getPatente());
+        }
     }
 
     public void consultarSaldo() {
-        double saldo = usuario.consultarSaldo();
-        System.out.println("Saldo disponible: " + saldo);
+        System.out.println("El saldo del usuario " + usuario.getNombre() + " es: " + usuario.consultarSaldo());
     }
 
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
-	public List<Estacionamiento> getEstacionamientos() {
-		return estacionamientos;
-	}
-	
 	@Override
 	public void driving() {
 		// TODO Auto-generated method stub
@@ -51,4 +64,12 @@ public class AppUsuario implements MovementSensor{
 		
 	}
 
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+	
 }

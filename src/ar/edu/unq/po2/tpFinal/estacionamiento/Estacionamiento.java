@@ -2,6 +2,8 @@ package ar.edu.unq.po2.tpFinal.estacionamiento;
 
 import java.time.LocalDateTime;
 
+import ar.edu.unq.po2.state.EstadoMaquina;
+
 public class Estacionamiento {
     private static int contador = 0;
     private int id;
@@ -9,16 +11,24 @@ public class Estacionamiento {
     private LocalDateTime inicio;
     private LocalDateTime fin;
     private Usuario usuario;
-    private boolean vigente;
+    private EstadoEstacionamiento estado;
 
     public Estacionamiento(Vehiculo vehiculo, Usuario usuario) {
         this.id = ++contador;
         this.vehiculo = vehiculo;
         this.usuario = usuario;
         this.inicio = LocalDateTime.now();
-        this.vigente = true;
+        setEstado(new estacionamientoIniciado());
     }
-
+    public EstadoEstacionamiento getEstado() {
+		return estado;
+	}
+    
+	public void setEstado(EstadoEstacionamiento estadoActual) {
+		this.estado = estadoActual;
+		this.estado.setEstacionamiento(this);
+	}
+	
     public void finalizarEstacionamiento() {
         this.fin = LocalDateTime.now();
         this.vigente = false;

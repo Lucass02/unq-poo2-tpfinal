@@ -2,8 +2,6 @@ package ar.edu.unq.po2.tpFinal.estacionamiento;
 
 import java.time.LocalDateTime;
 
-import ar.edu.unq.po2.state.EstadoMaquina;
-
 public class Estacionamiento {
     private static int contador = 0;
     private int id;
@@ -28,15 +26,6 @@ public class Estacionamiento {
 		this.estado = estadoActual;
 		this.estado.setEstacionamiento(this);
 	}
-	
-    public void finalizarEstacionamiento() {
-        this.fin = LocalDateTime.now();
-        this.vigente = false;
-    }
-
-    public boolean estaVigente() {
-        return vigente;
-    }
 
 	public int getId() {
 		return id;
@@ -76,10 +65,6 @@ public class Estacionamiento {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
-	}
-
-	public void setVigente(boolean vigente) {
-		this.vigente = vigente;
 	}
 
 }

@@ -22,7 +22,7 @@ public class RecargaCelular extends Compra {
 	}
 
 	@Override
-	public void realizarCompra(Estacionamiento estacionamiento, String patente) {
+	public void realizarCompra(AppUsuario appUsuario) {
         // Lógica para realizar una recarga de celular
         System.out.println("Realizando una recarga al número " + numeroCelular + " de: " + monto);
 	}

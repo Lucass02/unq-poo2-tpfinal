@@ -21,24 +21,31 @@ public abstract class Compra {
 	public int getNumeroControl() {
 		return numeroControl;
 	}
+	
 	public void setNumeroControl(int numeroControl) {
 		this.numeroControl = numeroControl;
 	}
+	
 	public PuntoDeVenta getPuntoDeVenta() {
 		return puntoDeVenta;
 	}
+	
 	public void setPuntoDeVenta(PuntoDeVenta puntoDeVenta) {
 		this.puntoDeVenta = puntoDeVenta;
 	}
+	
 	public LocalDate getFecha() {
 		return fecha;
 	}
+	
 	public void setFecha(LocalDate fecha) {
 		this.fecha = fecha;
 	}
+	
 	public LocalDate getHora() {
 		return hora;
 	}
+	
 	public void setHora(LocalDate hora) {
 		this.hora = hora;
 	}

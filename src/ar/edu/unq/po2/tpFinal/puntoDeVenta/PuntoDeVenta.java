@@ -12,7 +12,7 @@ public abstract class PuntoDeVenta {
     public PuntoDeVenta(int id, ZonaDeEstacionamiento zona) {
         this.id = id;
         this.zona = zona;
-        this.comprasRealizadas = new ArrayList<>();
+        this.comprasRealizadas = new ArrayList<Compra>();
     }
         
     public int getId() {
@@ -27,7 +27,6 @@ public abstract class PuntoDeVenta {
     	return comprasRealizadas;
     }
 
-
     public ZonaDeEstacionamiento getZona() {
         return zona;
     }
@@ -39,7 +38,5 @@ public abstract class PuntoDeVenta {
 	public void setZona(ZonaDeEstacionamiento zona) {
 		this.zona = zona;
 	}
-	
-	public abstract void realizarTransaccion();
 	
 }

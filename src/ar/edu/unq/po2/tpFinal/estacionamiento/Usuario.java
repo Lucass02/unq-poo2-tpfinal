@@ -6,15 +6,17 @@ public class Usuario {
     private int id;
     private String nombre;
     private String celular;
-    private double credito;
+    private String patente;
+	private double credito;
 
-    public Usuario(int id, String nombre, String celular) {
+    public Usuario(int id, String nombre, String celular, String patente) {
         this.id = id;
         this.nombre = nombre;
         this.celular = celular;
         this.credito = 0;
+        this.patente = patente;
     }
-
+	
     public void iniciarEstacionamiento(String patente, Sem sem) {
         sem.iniciarEstacionamiento(patente, this.celular);
     }
@@ -57,6 +59,14 @@ public class Usuario {
 
 	public void setCredito(double credito) {
 		this.credito = credito;
+	}
+	
+	public String getPatente() {
+		return patente;
+	}
+
+	public void setPatente(String patente) {
+		this.patente = patente;
 	}
 
 }

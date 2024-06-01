@@ -15,6 +15,11 @@ public class estacionamientoIniciado implements EstadoEstacionamiento {
 	}
 	
 	@Override
+	public boolean estaVigente() {
+		return true;
+	}
+	
+	@Override
 	public void setEstacionamiento(Estacionamiento estacionamiento) {
 		this.estacionamiento = estacionamiento;
 	}

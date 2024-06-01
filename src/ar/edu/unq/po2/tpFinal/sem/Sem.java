@@ -15,58 +15,63 @@ public class Sem {
     private List<Evento> eventos;
     private List<Infraccion> infracciones;
     private List<Estacionamiento> estacionamientosActivos;
-    private List<Usuario> usuarios;
-    private List<Vehiculo> vehiculos;
-    private LocalTime horaFinDeFranjaHoraria;
+    private int horaInicioDeFranjaHoraria;
+    private int horaFinDeFranjaHoraria;
+    private int horaActual;
+    
 
-    public Sem(LocalTime horaFinDeFranjaHoraria) {
+    public Sem(LocalTime horaFinDeFranjaHoraria, LocalTime horaInicioDeFranjaHoraria) {
         this.zonas = new ArrayList<ZonaDeEstacionamiento>();
         this.eventos = new ArrayList<Evento>();
         this.infracciones = new ArrayList<Infraccion>();
         this.estacionamientosActivos = new ArrayList<Estacionamiento>();
-        this.usuarios = new ArrayList<Usuario>();
-        this.vehiculos = new ArrayList<Vehiculo>();
-        this.horaFinDeFranjaHoraria = horaFinDeFranjaHoraria;
+        this.horaInicioDeFranjaHoraria = 7;
+        this.horaFinDeFranjaHoraria = 20;
+        this.horaActual = 12;
     }
 
     public void agregarZona(ZonaDeEstacionamiento zona) {
         zonas.add(zona);
     }
 
-    public void agregarUsuario(Usuario usuario) {
-        usuarios.add(usuario);
-    }
-
-    public void agregarVehiculo(Vehiculo vehiculo) {
-        vehiculos.add(vehiculo);
-    }
-
-    public void iniciarEstacionamiento(String patente, String celular) {
-        Usuario usuario = buscarUsuarioPorCelular(celular);
-        Vehiculo vehiculo = buscarVehiculoPorPatente(patente);
-
-        if (usuario != null && vehiculo != null) {
-            Estacionamiento estacionamiento = new Estacionamiento(vehiculo, usuario);
-            estacionamientosActivos.add(estacionamiento);
-
-            Evento evento = new Evento("Inicio", patente, celular);
-            notificar(evento);
-        } else {
-            System.out.println("Usuario o vehículo no encontrado.");
+    public void iniciarEstacionamiento(Usuario usuario) {
+    	
+    	boolean existeUsuario = estacionamientosActivos.stream().anyMatch(estacionamiento -> estacionamiento.getUsuario().equals(usuario));
+    	if (! esFranjaHoraria()) {
+    		System.out.println("Horario fuera de franja horaria");
+    		return;
+    	}
+    	if (! existeUsuario) {
+    		Estacionamiento estacionamiento = new Estacionamiento(usuario);
+    		estacionamientosActivos.add(estacionamiento);
+    	} else {
+            System.out.println("El usuario ya tiene un estacionamiento activo");
         }
     }
 
-    public void finalizarEstacionamiento(String patente, String celular) {
-        for (Estacionamiento e : estacionamientosActivos) {
-            if (e.getVehiculo().getPatente().equals(patente) && e.estaVigente()) {
-                e.finalizarEstacionamiento();
-                Evento evento = new Evento("Fin", patente, celular);
-                notificar(evento);
-                break;
-            }
+    public void finalizarEstacionamiento(Usuario usuario) {
+    	
+    	/* Extract method: existeUsuario(usuario)*/
+    	boolean existeUsuario = estacionamientosActivos.stream().anyMatch(estacionamiento -> estacionamiento.getUsuario().equals(usuario));
+    	/* Extract method: estacionamientoUsuario(usuario) */
+    	Estacionamiento estacionamientoUsuario = estacionamientosActivos.stream()
+                .filter(e -> e.getUsuario().equals(usuario))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No se encontró un Estacionamiento con el usuario dado."));
+    	
+    	if (existeUsuario) {
+    		estacionamientoUsuario.finalizarEstacionamiento();
+    		estacionamientosActivos.remove(estacionamientoUsuario);
+    	} else {
+            System.out.println("El usuario no tiene ningún estacionamiento activo");
         }
     }
-
+    
+    public boolean esFranjaHoraria() {
+    	return (this.horaInicioDeFranjaHoraria < this.horaActual && 
+    			this.horaFinDeFranjaHoraria > this.horaActual);
+    }
+    
     public void finalizarTodosLosEstacionamientos() {
         for (Estacionamiento e : estacionamientosActivos) {
             if (e.estaVigente()) {

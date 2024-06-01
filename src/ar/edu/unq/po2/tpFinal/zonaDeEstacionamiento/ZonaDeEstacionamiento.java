@@ -11,7 +11,7 @@ public class ZonaDeEstacionamiento {
     private String nombre;
     private String ubicacion;
     private List<PuntoDeVenta> puntosDeVentas;
-    private List<Inspector> inspectores;
+    private List<Inspector> inspectores; /* cambiar esto*/
 
     public ZonaDeEstacionamiento(int id, String nombre, String ubicacion) {
         this.id = id;

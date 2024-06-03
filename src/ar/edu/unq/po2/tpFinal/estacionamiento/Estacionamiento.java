@@ -11,16 +11,16 @@ public class Estacionamiento {
     public Estacionamiento(Usuario usuario) {
         this.usuario = usuario;
         this.inicio = LocalDateTime.now();
-        setEstado(new estacionamientoIniciado());
+        this.estado = new estacionamientoIniciado();
     }
     /* Métodos */
     
     public void iniciarEstacionamiento() {
-		this.estado.iniciarEstacionamiento();
+		this.estado.iniciarEstacionamiento(this);
 	}
 
 	public void finalizarEstacionamiento() {
-		this.estado.finalizarEstacionamiento();
+		this.estado.finalizarEstacionamiento(this);
 	}
 	
 	public boolean estaVigente() {
@@ -32,7 +32,6 @@ public class Estacionamiento {
 	
 	public void setEstado(EstadoEstacionamiento estadoActual) {
 		this.estado = estadoActual;
-		this.estado.setEstacionamiento(this);
 	}
 
 	public EstadoEstacionamiento getEstado() {

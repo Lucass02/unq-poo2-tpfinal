@@ -2,15 +2,13 @@ package ar.edu.unq.po2.tpFinal.estacionamiento;
 
 public class estacionamientoIniciado implements EstadoEstacionamiento {
 	
-	private Estacionamiento estacionamiento;
-	
 	@Override
-	public void iniciarEstacionamiento() {
+	public void iniciarEstacionamiento(Estacionamiento estacionamiento) {
 		System.out.println("Error: Estacionamiento ya iniciado");
 	}
 
 	@Override
-	public void finalizarEstacionamiento() {
+	public void finalizarEstacionamiento(Estacionamiento estacionamiento) {
 		estacionamiento.setEstado(new estacionamientoSinIniciar());
 	}
 	
@@ -18,10 +16,4 @@ public class estacionamientoIniciado implements EstadoEstacionamiento {
 	public boolean estaVigente() {
 		return true;
 	}
-	
-	@Override
-	public void setEstacionamiento(Estacionamiento estacionamiento) {
-		this.estacionamiento = estacionamiento;
-	}
-
 }

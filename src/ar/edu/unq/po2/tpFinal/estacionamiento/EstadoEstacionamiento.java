@@ -1,8 +1,7 @@
 package ar.edu.unq.po2.tpFinal.estacionamiento;
 
 public interface EstadoEstacionamiento {
-	public void iniciarEstacionamiento();
-	public void finalizarEstacionamiento();
+	public void iniciarEstacionamiento(Estacionamiento estacionamiento);
+	public void finalizarEstacionamiento(Estacionamiento estacionamiento);
 	public boolean estaVigente();
-	void setEstacionamiento(Estacionamiento estacionamiento);
 }

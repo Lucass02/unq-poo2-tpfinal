@@ -11,7 +11,7 @@ public class Estacionamiento {
     public Estacionamiento(Usuario usuario) {
         this.usuario = usuario;
         this.inicio = LocalDateTime.now();
-        this.estado = new estacionamientoIniciado();
+        this.estado = new EstacionamientoIniciado();
     }
     /* Métodos */
     

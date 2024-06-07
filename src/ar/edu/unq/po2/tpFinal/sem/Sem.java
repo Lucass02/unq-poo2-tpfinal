@@ -1,12 +1,10 @@
 package ar.edu.unq.po2.tpFinal.sem;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unq.po2.tpFinal.estacionamiento.Estacionamiento;
 import ar.edu.unq.po2.tpFinal.estacionamiento.Usuario;
-import ar.edu.unq.po2.tpFinal.estacionamiento.Vehiculo;
 import ar.edu.unq.po2.tpFinal.inspector.Infraccion;
 import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
 
@@ -17,59 +15,53 @@ public class Sem {
     private List<Estacionamiento> estacionamientosActivos;
     private int horaInicioDeFranjaHoraria;
     private int horaFinDeFranjaHoraria;
-    private int horaActual;
-    
 
-    public Sem(LocalTime horaFinDeFranjaHoraria, LocalTime horaInicioDeFranjaHoraria) {
+    public Sem() {
         this.zonas = new ArrayList<ZonaDeEstacionamiento>();
         this.eventos = new ArrayList<Evento>();
         this.infracciones = new ArrayList<Infraccion>();
         this.estacionamientosActivos = new ArrayList<Estacionamiento>();
         this.horaInicioDeFranjaHoraria = 7;
         this.horaFinDeFranjaHoraria = 20;
-        this.horaActual = 12;
     }
 
     public void agregarZona(ZonaDeEstacionamiento zona) {
         zonas.add(zona);
     }
 
-    public void iniciarEstacionamiento(Usuario usuario) {
-    	
-    	boolean existeUsuario = estacionamientosActivos.stream().anyMatch(estacionamiento -> estacionamiento.getUsuario().equals(usuario));
-    	if (! esFranjaHoraria()) {
-    		System.out.println("Horario fuera de franja horaria");
-    		return;
-    	}
-    	if (! existeUsuario) {
+    public void iniciarEstacionamiento(Usuario usuario, Reloj reloj) {
+    	if (!existeUsuario(usuario) && esFranjaHoraria(reloj)) {
     		Estacionamiento estacionamiento = new Estacionamiento(usuario);
     		estacionamientosActivos.add(estacionamiento);
     	} else {
-            System.out.println("El usuario ya tiene un estacionamiento activo");
+            System.out.println("El usuario ya tiene un estacionamiento activo o el horario esta fuera de la franja horaria");
         }
     }
 
     public void finalizarEstacionamiento(Usuario usuario) {
-    	
-    	/* Extract method: existeUsuario(usuario)*/
-    	boolean existeUsuario = estacionamientosActivos.stream().anyMatch(estacionamiento -> estacionamiento.getUsuario().equals(usuario));
-    	/* Extract method: estacionamientoUsuario(usuario) */
-    	Estacionamiento estacionamientoUsuario = estacionamientosActivos.stream()
-                .filter(e -> e.getUsuario().equals(usuario))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("No se encontró un Estacionamiento con el usuario dado."));
-    	
-    	if (existeUsuario) {
-    		estacionamientoUsuario.finalizarEstacionamiento();
-    		estacionamientosActivos.remove(estacionamientoUsuario);
+    	if (existeUsuario(usuario)) {
+    		Estacionamiento estacionamiento = estacionamientoUsuario(usuario);
+    		estacionamiento.finalizarEstacionamiento();
+    		estacionamientosActivos.remove(estacionamiento);
     	} else {
             System.out.println("El usuario no tiene ningún estacionamiento activo");
         }
     }
     
-    public boolean esFranjaHoraria() {
-    	return (this.horaInicioDeFranjaHoraria < this.horaActual && 
-    			this.horaFinDeFranjaHoraria > this.horaActual);
+    public boolean existeUsuario(Usuario usuario) {
+    	return estacionamientosActivos.stream().anyMatch(estacionamiento -> estacionamiento.getUsuario().equals(usuario));
+    }
+    
+    public Estacionamiento estacionamientoUsuario(Usuario usuario) {
+    	return estacionamientosActivos.stream()
+    								  .filter(e -> e.getUsuario().equals(usuario))
+    								  .findFirst()
+    								  .orElseThrow(() -> new RuntimeException("No se encontró un Estacionamiento con el usuario dado."));
+    }
+        
+    public boolean esFranjaHoraria(Reloj reloj) {
+        return (this.horaInicioDeFranjaHoraria <= reloj.getHora() &&
+                reloj.getHora() < this.horaFinDeFranjaHoraria);
     }
     
     public void finalizarTodosLosEstacionamientos() {
@@ -85,14 +77,14 @@ public class Sem {
         infracciones.add(infraccion);
     }
 
-    public boolean consultarEstacionamiento(String patente) {
-        for (Estacionamiento e : estacionamientosActivos) {
-            if (e.getVehiculo().getPatente().equals(patente) && e.estaVigente()) {
-                return true;
-            }
-        }
-        return false;
-    }
+    //public boolean consultarEstacionamiento(String patente) {
+    //    for (Estacionamiento e : estacionamientosActivos) {
+    //        if (e.getVehiculo().getPatente().equals(patente) && e.estaVigente()) {
+    //            return true;
+    //        }
+    //    }
+    //    return false;
+    //}
 
     public void suscribir(Evento evento) {
         eventos.add(evento);
@@ -102,43 +94,19 @@ public class Sem {
         eventos.remove(evento);
     }
 
-    private void notificar(Evento evento) {
-        for (Evento e : eventos) {
-            if (e.getTipo().equals(evento.getTipo())) {
-                e.notificar();
-            }
-        }
-    }
+   // private void notificar(Evento evento) {
+   //     for (Evento e : eventos) {
+   //         if (e.getTipo().equals(evento.getTipo())) {
+   //             e.notificar();
+   //         }
+   //     }
+   // }
 
-    public void chequearYFinalizarEstacionamientos() {
-        if (LocalTime.now().isAfter(horaFinDeFranjaHoraria)) {
-            finalizarTodosLosEstacionamientos();
-        }
-    }
-
-    private Usuario buscarUsuarioPorCelular(String celular) {
-        for (Usuario u : usuarios) {
-            if (u.getCelular().equals(celular)) {
-                return u;
-            }
-        }
-        return null;
-    }
-
-    private Vehiculo buscarVehiculoPorPatente(String patente) {
-        for (Vehiculo v : vehiculos) {
-            if (v.getPatente().equals(patente)) {
-                return v;
-            }
-        }
-        return null;
-    }
-
-	public LocalTime getHoraFinDeFranjaHoraria() {
+	public int getHoraFinDeFranjaHoraria() {
 		return horaFinDeFranjaHoraria;
 	}
 
-	public void setHoraFinDeFranjaHoraria(LocalTime horaFinDeFranjaHoraria) {
+	public void setHoraFinDeFranjaHoraria(int horaFinDeFranjaHoraria) {
 		this.horaFinDeFranjaHoraria = horaFinDeFranjaHoraria;
 	}
 
@@ -156,14 +124,6 @@ public class Sem {
 
 	public List<Estacionamiento> getEstacionamientosActivos() {
 		return estacionamientosActivos;
-	}
-
-	public List<Usuario> getUsuarios() {
-		return usuarios;
-	}
-
-	public List<Vehiculo> getVehiculos() {
-		return vehiculos;
 	}
 
 }

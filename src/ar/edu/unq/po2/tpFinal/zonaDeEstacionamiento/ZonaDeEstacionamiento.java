@@ -11,22 +11,18 @@ public class ZonaDeEstacionamiento {
     private String nombre;
     private String ubicacion;
     private List<PuntoDeVenta> puntosDeVentas;
-    private List<Inspector> inspectores; /* cambiar esto*/
+    private Inspector inspector;
 
-    public ZonaDeEstacionamiento(int id, String nombre, String ubicacion) {
+    public ZonaDeEstacionamiento(int id, String nombre, String ubicacion, Inspector inspector) {
         this.id = id;
         this.nombre = nombre;
         this.ubicacion = ubicacion;
         this.puntosDeVentas = new ArrayList<PuntoDeVenta>();
-        this.inspectores = new ArrayList<Inspector>();
+        this.inspector = inspector;
     }
 
     public void agregarPuntoVenta(PuntoDeVenta puntoDeVenta) {
     	puntosDeVentas.add(puntoDeVenta);
-    }
-
-    public void agregarInspector(Inspector inspector) {
-        inspectores.add(inspector);
     }
 
 	public int getId() {
@@ -57,8 +53,12 @@ public class ZonaDeEstacionamiento {
 		return puntosDeVentas;
 	}
 
-	public List<Inspector> getInspectores() {
-		return inspectores;
+	public Inspector getInspector() {
+		return inspector;
 	}
 
+	public void setInspector(Inspector inspector) {
+		this.inspector = inspector;
+	}
+	
 }

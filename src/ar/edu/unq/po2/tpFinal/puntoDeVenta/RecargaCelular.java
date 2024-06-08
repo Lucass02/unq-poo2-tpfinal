@@ -2,29 +2,27 @@ package ar.edu.unq.po2.tpFinal.puntoDeVenta;
 
 import java.time.LocalDate;
 
-import ar.edu.unq.po2.tpFinal.estacionamiento.AppUsuario;
-import ar.edu.unq.po2.tpFinal.estacionamiento.Estacionamiento;
-import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
+import ar.edu.unq.po2.tpFinal.estacionamiento.Usuario;
+import ar.edu.unq.po2.tpFinal.sem.Sem;
+
 
 public class RecargaCelular extends Compra {
-    private String numeroCelular;
-    private double monto;
-
-    public String getNumeroCelular() {
-        return numeroCelular;
-    }
-
-	public RecargaCelular(int numeroControl, PuntoDeVenta puntoDeVenta, LocalDate fecha, LocalDate hora,
-			String numeroCelular, double monto) {
+	
+	private double monto;
+	
+    public RecargaCelular(int numeroControl, PuntoDeVenta puntoDeVenta, LocalDate fecha, LocalDate hora) {
 		super(numeroControl, puntoDeVenta, fecha, hora);
-		this.numeroCelular = numeroCelular;
-		this.monto = monto;
+		// TODO Auto-generated constructor stub
 	}
+
 
 	@Override
-	public void realizarCompra(AppUsuario appUsuario) {
-        // Lógica para realizar una recarga de celular
-        System.out.println("Realizando una recarga al número " + numeroCelular + " de: " + monto);
+	public void realizarCompra(Sem sem, PuntoDeVenta puntoDeVenta, Usuario usuario) {
+		puntoDeVenta.registrarCompra(this);
+		sem.recargarSaldo(monto, usuario);
 	}
+
+
+    
 
 }

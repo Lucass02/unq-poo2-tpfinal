@@ -2,8 +2,9 @@ package ar.edu.unq.po2.tpFinal.puntoDeVenta;
 
 import java.time.LocalDate;
 
-import ar.edu.unq.po2.tpFinal.estacionamiento.AppUsuario;
-import ar.edu.unq.po2.tpFinal.estacionamiento.Estacionamiento;
+import ar.edu.unq.po2.tpFinal.estacionamiento.Usuario;
+import ar.edu.unq.po2.tpFinal.sem.Sem;
+
 
 public abstract class Compra {
 	private int numeroControl;
@@ -50,6 +51,5 @@ public abstract class Compra {
 		this.hora = hora;
 	}
 	
-	public abstract void realizarCompra(Estacionamiento estacionamiento, String patente);
-	public abstract void realizarCompra(AppUsuario appUsuario);
+	public abstract void realizarCompra(Sem sem, PuntoDeVenta puntoDeVenta, Usuario usuario);
 }

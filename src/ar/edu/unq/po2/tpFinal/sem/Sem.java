@@ -1,5 +1,6 @@
 package ar.edu.unq.po2.tpFinal.sem;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -124,6 +125,16 @@ public class Sem {
 
 	public List<Estacionamiento> getEstacionamientosActivos() {
 		return estacionamientosActivos;
+	}
+
+	public void asignarEstacionamiento(ZonaDeEstacionamiento zona, Usuario usuario, double cantidadDeHsCompradas) {
+		//Debe implementarse proximamente ya que se deben poder registrar bien los estacionamientos.
+		
+		// iniciarEstacionamiento(usuario, LocalDataTimeNow());	
+	}
+
+	public void recargarSaldo(double monto, Usuario usuario) {
+		usuario.recargarSaldo(monto);
 	}
 
 }

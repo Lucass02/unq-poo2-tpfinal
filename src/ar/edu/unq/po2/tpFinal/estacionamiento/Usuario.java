@@ -7,13 +7,13 @@ public class Usuario {
     private String nombre;
     private String celular;
     private String patente;
-	private double credito;
+	private double saldo;
 
     public Usuario(int id, String nombre, String celular, String patente) {
         this.id = id;
         this.nombre = nombre;
         this.celular = celular;
-        this.credito = 0;
+        this.saldo = 0;
         this.patente = patente;
     }
 	
@@ -26,11 +26,11 @@ public class Usuario {
     }
 
     public double consultarSaldo() {
-        return this.credito;
+        return this.saldo;
     }
 
-    public void recargarCredito(double monto) {
-        this.credito += monto;
+    public void recargarSaldo(double monto) {
+        this.saldo += monto;
     }
 
 	public int getId() {
@@ -58,7 +58,7 @@ public class Usuario {
 	}
 
 	public void setCredito(double credito) {
-		this.credito = credito;
+		this.saldo = credito;
 	}
 	
 	public String getPatente() {

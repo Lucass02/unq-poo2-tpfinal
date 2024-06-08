@@ -2,14 +2,18 @@ package ar.edu.unq.po2.tpFinal.estacionamiento;
 
 import java.time.LocalDateTime;
 
+import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
+
 public class Estacionamiento {
     private LocalDateTime inicio;
     private LocalDateTime fin;
     private Usuario usuario;
     private EstadoEstacionamiento estado;
+    private ZonaDeEstacionamiento zona;
 
-    public Estacionamiento(Usuario usuario) {
+    public Estacionamiento(Usuario usuario, ZonaDeEstacionamiento zona) {
         this.usuario = usuario;
+        this.zona = zona;
         this.inicio = LocalDateTime.now();
         this.estado = new EstacionamientoIniciado();
     }
@@ -60,6 +64,15 @@ public class Estacionamiento {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+
+	public ZonaDeEstacionamiento getZona() {
+		return zona;
+	}
+
+	public void setZona(ZonaDeEstacionamiento zona) {
+		this.zona = zona;
 	}
 
 }

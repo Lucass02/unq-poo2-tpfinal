@@ -1,16 +1,27 @@
 package ar.edu.unq.po2.tpFinal.puntoDeVenta;
 
-import ar.edu.unq.po2.tpFinal.estacionamiento.AppUsuario;
-import ar.edu.unq.po2.tpFinal.estacionamiento.Estacionamiento;
-import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
+import java.time.LocalDate;
+
+import ar.edu.unq.po2.tpFinal.estacionamiento.Usuario;
+import ar.edu.unq.po2.tpFinal.sem.Sem;
 
 public class CompraPuntual extends Compra {
-    private double monto;
+    private double cantidadDeHsCompradas;
+
+	public CompraPuntual(int numeroControl, PuntoDeVenta puntoDeVenta, LocalDate fecha, LocalDate hora,
+			double cantidadDeHsCompradas) {
+		super(numeroControl, puntoDeVenta, fecha, hora);
+		this.cantidadDeHsCompradas = cantidadDeHsCompradas;
+	}
 
 	@Override
-	public void realizarCompra(Estacionamiento estacionamiento, String patente) {
-        // Lógica para realizar una compra puntual
-        System.out.println("Realizando una compra puntual de: " + monto);
+	public void realizarCompra(Sem sem, PuntoDeVenta puntoDeVenta, Usuario usuario) {
+		//Logica para registrar la compra dentro del punto de venta
+        puntoDeVenta.registrarCompra(this);
+        
+        // Lógica para realizar una compra puntual desde sem
+        sem.asignarEstacionamiento(puntoDeVenta.getZona(), usuario, cantidadDeHsCompradas);
+        
 	}
     
 }

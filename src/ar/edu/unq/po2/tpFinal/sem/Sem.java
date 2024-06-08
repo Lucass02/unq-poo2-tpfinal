@@ -9,23 +9,36 @@ import ar.edu.unq.po2.tpFinal.estacionamiento.Usuario;
 import ar.edu.unq.po2.tpFinal.inspector.Infraccion;
 import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
 
-public class Sem {
+public class Sem implements INotificador {
     private List<ZonaDeEstacionamiento> zonas;
-    private List<Evento> eventos;
     private List<Infraccion> infracciones;
     private List<Estacionamiento> estacionamientosActivos;
     private int horaInicioDeFranjaHoraria;
     private int horaFinDeFranjaHoraria;
-
+    private List<ISuscriptor> suscriptores;
+    
+    
     public Sem() {
         this.zonas = new ArrayList<ZonaDeEstacionamiento>();
-        this.eventos = new ArrayList<Evento>();
         this.infracciones = new ArrayList<Infraccion>();
         this.estacionamientosActivos = new ArrayList<Estacionamiento>();
+        this.suscriptores = new ArrayList<ISuscriptor>();
         this.horaInicioDeFranjaHoraria = 7;
         this.horaFinDeFranjaHoraria = 20;
     }
+    
+    public void suscribir(ISuscriptor suscriptor) {
+    	suscriptores.add(suscriptor);
+    }
 
+    public void desuscribir(ISuscriptor suscriptor) {
+    	suscriptores.remove(suscriptor);
+    }
+    
+    public void notificar(String evento) {
+    	suscriptores.stream().forEach(s -> s.actualizar(evento));
+    }
+    
     public void agregarZona(ZonaDeEstacionamiento zona) {
         zonas.add(zona);
     }
@@ -34,6 +47,7 @@ public class Sem {
     	if (!existeUsuario(usuario) && esFranjaHoraria(reloj)) {
     		Estacionamiento estacionamiento = new Estacionamiento(usuario);
     		estacionamientosActivos.add(estacionamiento);
+    		notificar("Se inicio el estacionamiento para la patente: " + usuario.getPatente());
     	} else {
             System.out.println("El usuario ya tiene un estacionamiento activo o el horario esta fuera de la franja horaria");
         }
@@ -44,6 +58,7 @@ public class Sem {
     		Estacionamiento estacionamiento = estacionamientoUsuario(usuario);
     		estacionamiento.finalizarEstacionamiento();
     		estacionamientosActivos.remove(estacionamiento);
+    		notificar("Se finalizo el estacionamiento para la patente: " + usuario.getPatente());
     	} else {
             System.out.println("El usuario no tiene ningún estacionamiento activo");
         }
@@ -87,22 +102,6 @@ public class Sem {
     //    return false;
     //}
 
-    public void suscribir(Evento evento) {
-        eventos.add(evento);
-    }
-
-    public void desuscribir(Evento evento) {
-        eventos.remove(evento);
-    }
-
-   // private void notificar(Evento evento) {
-   //     for (Evento e : eventos) {
-   //         if (e.getTipo().equals(evento.getTipo())) {
-   //             e.notificar();
-   //         }
-   //     }
-   // }
-
 	public int getHoraFinDeFranjaHoraria() {
 		return horaFinDeFranjaHoraria;
 	}
@@ -113,10 +112,6 @@ public class Sem {
 
 	public List<ZonaDeEstacionamiento> getZonas() {
 		return zonas;
-	}
-
-	public List<Evento> getEventos() {
-		return eventos;
 	}
 
 	public List<Infraccion> getInfracciones() {
@@ -135,6 +130,7 @@ public class Sem {
 
 	public void recargarSaldo(double monto, Usuario usuario) {
 		usuario.recargarSaldo(monto);
+		notificar("Se recargo saldo para el celular: " + usuario.getCelular() + "por un monto de: " + monto );
 	}
 
 }

@@ -7,12 +7,12 @@ import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
 public class Estacionamiento {
     private LocalDateTime inicio;
     private LocalDateTime fin;
-    private Usuario usuario;
-    private EstadoEstacionamiento estado;
+    private String patente;
+	private EstadoEstacionamiento estado;
     private ZonaDeEstacionamiento zona;
 
-    public Estacionamiento(Usuario usuario, ZonaDeEstacionamiento zona) {
-        this.usuario = usuario;
+    public Estacionamiento(String patente,ZonaDeEstacionamiento zona) {
+        this.patente = patente;
         this.zona = zona;
         this.inicio = LocalDateTime.now();
         this.estado = new EstacionamientoIniciado();
@@ -25,12 +25,7 @@ public class Estacionamiento {
 
 	public void finalizarEstacionamiento() {
 		this.estado.finalizarEstacionamiento(this);
-	}
-	
-	public boolean estaVigente() {
-		return (this.estado.estaVigente());
-	}
-    
+	}  
     
     /* Getters y Setters*/
 	
@@ -58,15 +53,6 @@ public class Estacionamiento {
 		this.fin = fin;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
-
 	public ZonaDeEstacionamiento getZona() {
 		return zona;
 	}
@@ -74,5 +60,12 @@ public class Estacionamiento {
 	public void setZona(ZonaDeEstacionamiento zona) {
 		this.zona = zona;
 	}
+	
+	public String getPatente() {
+		return patente;
+	}
 
+	public void setPatente(String patente) {
+		this.patente = patente;
+	}
 }

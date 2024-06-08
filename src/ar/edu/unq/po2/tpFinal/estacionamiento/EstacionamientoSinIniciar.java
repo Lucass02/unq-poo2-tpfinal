@@ -11,8 +11,4 @@ public class EstacionamientoSinIniciar implements EstadoEstacionamiento {
 	public void finalizarEstacionamiento(Estacionamiento estacionamiento) {
 		System.out.println("Error: No hay estacionamiento iniciado");
 	}
-	@Override
-	public boolean estaVigente() {
-		return false;
-	}
 }

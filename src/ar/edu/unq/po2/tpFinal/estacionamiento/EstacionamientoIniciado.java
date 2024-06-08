@@ -11,9 +11,4 @@ public class EstacionamientoIniciado implements EstadoEstacionamiento {
 	public void finalizarEstacionamiento(Estacionamiento estacionamiento) {
 		estacionamiento.setEstado(new EstacionamientoSinIniciar());
 	}
-	
-	@Override
-	public boolean estaVigente() {
-		return true;
-	}
 }

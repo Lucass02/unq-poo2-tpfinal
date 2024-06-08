@@ -43,34 +43,34 @@ public class Sem implements INotificador {
         zonas.add(zona);
     }
 
-    public void iniciarEstacionamiento(Usuario usuario, Reloj reloj) {
-    	if (!existeUsuario(usuario) && esFranjaHoraria(reloj)) {
-    		Estacionamiento estacionamiento = new Estacionamiento(usuario);
+    public void iniciarEstacionamiento(String patente, Reloj reloj) {
+    	if (!estacionamientoVigente(patente) && esFranjaHoraria(reloj)) {
+    		Estacionamiento estacionamiento = new Estacionamiento(patente);
+    		estacionamiento.iniciarEstacionamiento();
     		estacionamientosActivos.add(estacionamiento);
-    		notificar("Se inicio el estacionamiento para la patente: " + usuario.getPatente());
+    		notificar("Se inicio el estacionamiento para la patente: " + patente);
     	} else {
             System.out.println("El usuario ya tiene un estacionamiento activo o el horario esta fuera de la franja horaria");
         }
     }
 
-    public void finalizarEstacionamiento(Usuario usuario) {
-    	if (existeUsuario(usuario)) {
-    		Estacionamiento estacionamiento = estacionamientoUsuario(usuario);
+    public void finalizarEstacionamiento(String patente) {
+    	if (estacionamientoVigente(patente)) {
+    		Estacionamiento estacionamiento = estacionamientoUsuario(patente);
     		estacionamiento.finalizarEstacionamiento();
     		estacionamientosActivos.remove(estacionamiento);
-    		notificar("Se finalizo el estacionamiento para la patente: " + usuario.getPatente());
+    		notificar("Se finalizo el estacionamiento para la patente: " + patente);
     	} else {
             System.out.println("El usuario no tiene ningún estacionamiento activo");
         }
     }
-    
-    public boolean existeUsuario(Usuario usuario) {
-    	return estacionamientosActivos.stream().anyMatch(estacionamiento -> estacionamiento.getUsuario().equals(usuario));
+    public boolean estacionamientoVigente(String patente) {
+    	return estacionamientosActivos.stream().anyMatch(estacionamiento -> estacionamiento.getPatente().equals(patente));
     }
     
-    public Estacionamiento estacionamientoUsuario(Usuario usuario) {
+    public Estacionamiento estacionamientoUsuario(String patente) {
     	return estacionamientosActivos.stream()
-    								  .filter(e -> e.getUsuario().equals(usuario))
+    								  .filter(e -> e.getPatente().equals(patente))
     								  .findFirst()
     								  .orElseThrow(() -> new RuntimeException("No se encontró un Estacionamiento con el usuario dado."));
     }

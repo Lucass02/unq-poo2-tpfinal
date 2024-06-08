@@ -2,19 +2,17 @@ package ar.edu.unq.po2.tpFinal.inspector;
 
 import java.time.LocalDateTime;
 
-import ar.edu.unq.po2.tpFinal.estacionamiento.Vehiculo;
-
 public class Infraccion {
     private static int contador = 0;
     private int id;
-    private Vehiculo vehiculo;
     private Inspector inspector;
     private LocalDateTime fechaHora;
+    private String patente;
 
-    public Infraccion(Vehiculo vehiculo, Inspector inspector) {
+    public Infraccion(Inspector inspector, String patente) {
         this.id = ++contador;
-        this.vehiculo = vehiculo;
         this.inspector = inspector;
+        this.patente = patente;
         this.fechaHora = LocalDateTime.now();
     }
 
@@ -26,12 +24,12 @@ public class Infraccion {
 		this.id = id;
 	}
 
-	public Vehiculo getVehiculo() {
-		return vehiculo;
+	public String getPatente() {
+		return patente;
 	}
 
-	public void setVehiculo(Vehiculo vehiculo) {
-		this.vehiculo = vehiculo;
+	public void setPatente(String patente) {
+		this.patente = patente;
 	}
 
 	public Inspector getInspector() {

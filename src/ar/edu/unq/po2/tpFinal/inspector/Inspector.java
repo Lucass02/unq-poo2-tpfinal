@@ -1,6 +1,5 @@
 package ar.edu.unq.po2.tpFinal.inspector;
 
-import ar.edu.unq.po2.tpFinal.estacionamiento.Vehiculo;
 import ar.edu.unq.po2.tpFinal.sem.Sem;
 import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
 
@@ -14,19 +13,20 @@ public class Inspector {
         this.nombre = nombre;
         this.zona = zona;
     }
-
-    public void verificarEstacionamiento(Vehiculo vehiculo, Sem sem) {
-        boolean estacionamientoValido = sem.consultarEstacionamiento(vehiculo.getPatente());
-        if (!estacionamientoValido) {
-            registrarInfraccion(vehiculo, sem);
-        }
+    public void verificarZona() {
+        this.zona.estacionamientosActivos.stream().filter(estacionamiento -> !estacionamiento.estaVigente())
+        										  .registrarInfraccion(this,estacionamiento.getPatente());
+    }
+    
+    public boolean verificarEstacionamiento(Sem sem, String patente) {
+        return sem.estacionamientoVigente(patente);
     }
 
-    private void registrarInfraccion(Vehiculo vehiculo, Sem sem) {
-        Infraccion infraccion = new Infraccion(vehiculo, this);
+    private void registrarInfraccion(Sem sem, String patente) {
+        Infraccion infraccion = new Infraccion(this, patente);
         sem.registrarInfraccion(infraccion);
     }
-
+    
 	public int getId() {
 		return id;
 	}

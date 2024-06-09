@@ -6,13 +6,12 @@ import java.util.List;
 
 import ar.edu.unq.po2.tpFinal.estacionamiento.Estacionamiento;
 import ar.edu.unq.po2.tpFinal.estacionamiento.Usuario;
-import ar.edu.unq.po2.tpFinal.inspector.Infraccion;
+import ar.edu.unq.po2.tpFinal.inspectorApp.Infraccion;
 import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
 
 public class Sem implements INotificador {
     private List<ZonaDeEstacionamiento> zonas;
     private List<Infraccion> infracciones;
-    private List<Estacionamiento> estacionamientosActivos;
     private int horaInicioDeFranjaHoraria;
     private int horaFinDeFranjaHoraria;
     private List<ISuscriptor> suscriptores;
@@ -21,7 +20,6 @@ public class Sem implements INotificador {
     public Sem() {
         this.zonas = new ArrayList<ZonaDeEstacionamiento>();
         this.infracciones = new ArrayList<Infraccion>();
-        this.estacionamientosActivos = new ArrayList<Estacionamiento>();
         this.suscriptores = new ArrayList<ISuscriptor>();
         this.horaInicioDeFranjaHoraria = 7;
         this.horaFinDeFranjaHoraria = 20;

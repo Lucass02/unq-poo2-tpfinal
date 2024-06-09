@@ -1,40 +1,35 @@
-package ar.edu.unq.po2.tpFinal.inspector;
+package ar.edu.unq.po2.tpFinal.inspectorApp;
 
 import ar.edu.unq.po2.tpFinal.sem.Sem;
 import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
 
-public class Inspector {
-    private int id;
+public class InspectorApp {
     private String nombre;
     private ZonaDeEstacionamiento zona;
 
-    public Inspector(int id, String nombre, ZonaDeEstacionamiento zona) {
-        this.id = id;
+    public InspectorApp(String nombre, ZonaDeEstacionamiento zona) {
         this.nombre = nombre;
         this.zona = zona;
     }
-    public void verificarZona() {
-        this.zona.estacionamientosActivos.stream().filter(estacionamiento -> !estacionamiento.estaVigente())
-        										  .registrarInfraccion(this,estacionamiento.getPatente());
+    /*
+    public void verificarZona(Sem sem) {
+        this.zona.getEstacionamientos().stream().filter(estacionamiento -> !estacionamiento.estaVigente())
+        										.registrarInfraccion(sem, estacionamiento.getPatente());
     }
-    
+    */
     public boolean verificarEstacionamiento(Sem sem, String patente) {
         return sem.estacionamientoVigente(patente);
     }
-
-    private void registrarInfraccion(Sem sem, String patente) {
+    
+    public void registrarInfraccion(Sem sem, String patente) {
         Infraccion infraccion = new Infraccion(this, patente);
         sem.registrarInfraccion(infraccion);
     }
     
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
+    public void agregarAZona(ZonaDeEstacionamiento zona) {
+    	this.zona = zona;
+    }
+    
 	public String getNombre() {
 		return nombre;
 	}

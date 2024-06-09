@@ -30,6 +30,6 @@ public class SemTestCase {
 		when(reloj.getHora()).thenReturn(21);
     	assertFalse(sem1.esFranjaHoraria(reloj)); 
     }
-                            
+                           
 }
 

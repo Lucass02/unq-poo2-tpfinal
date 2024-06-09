@@ -1,7 +1,5 @@
 package ar.edu.unq.po2.tpFinal.estacionamiento;
 
-import ar.edu.unq.po2.tpFinal.sem.Sem;
-
 public class Usuario {
     private int id;
     private String nombre;
@@ -17,13 +15,13 @@ public class Usuario {
         this.patente = patente;
     }
 	
-    public void iniciarEstacionamiento(String patente, Sem sem) {
-        sem.iniciarEstacionamiento(patente, this.celular);
-    }
+    //public void iniciarEstacionamiento(String patente, Sem sem) {
+    //    sem.iniciarEstacionamiento(patente, this.celular);
+    //}
 
-    public void finalizarEstacionamiento(String patente, Sem sem) {
-        sem.finalizarEstacionamiento(patente, this.celular);
-    }
+    //public void finalizarEstacionamiento(String patente, Sem sem) {
+    //    sem.finalizarEstacionamiento(patente, this.celular);
+    //}
 
     public double consultarSaldo() {
         return this.saldo;

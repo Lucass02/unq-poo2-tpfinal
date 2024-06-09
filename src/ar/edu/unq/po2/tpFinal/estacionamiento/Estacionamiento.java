@@ -19,13 +19,13 @@ public class Estacionamiento {
     }
     /* Métodos */
     
-    public void iniciarEstacionamiento() {
-		this.estado.iniciarEstacionamiento(this);
-	}
+    //public void iniciarEstacionamiento() {
+	//	this.estado.iniciarEstacionamiento(this);
+	//}
 
-	public void finalizarEstacionamiento() {
-		this.estado.finalizarEstacionamiento(this);
-	}  
+	//public void finalizarEstacionamiento() {
+	//	this.estado.finalizarEstacionamiento(this);
+	//}  
     
     /* Getters y Setters*/
 	

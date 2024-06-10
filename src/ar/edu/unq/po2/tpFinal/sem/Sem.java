@@ -3,7 +3,9 @@ package ar.edu.unq.po2.tpFinal.sem;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import ar.edu.unq.po2.tpFinal.estacionamiento.AppUsuario;
 import ar.edu.unq.po2.tpFinal.estacionamiento.Estacionamiento;
 import ar.edu.unq.po2.tpFinal.estacionamiento.Usuario;
 import ar.edu.unq.po2.tpFinal.inspectorApp.Infraccion;
@@ -12,6 +14,7 @@ import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
 public class Sem implements INotificador {
     private List<ZonaDeEstacionamiento> zonas;
     private List<Infraccion> infracciones;
+    private List<AppUsuario> usuarios;
     private int horaInicioDeFranjaHoraria;
     private int horaFinDeFranjaHoraria;
     private List<ISuscriptor> suscriptores;
@@ -120,15 +123,23 @@ public class Sem implements INotificador {
 		return estacionamientosActivos;
 	}
 
-	public void asignarEstacionamiento(ZonaDeEstacionamiento zona, Usuario usuario, double cantidadDeHsCompradas) {
+	public void asignarEstacionamiento(ZonaDeEstacionamiento zona, String patente, double cantidadDeHsCompradas) {
 		//Debe implementarse proximamente ya que se deben poder registrar bien los estacionamientos.
-		
-		// iniciarEstacionamiento(usuario, LocalDataTimeNow());	
 	}
 
-	public void recargarSaldo(double monto, Usuario usuario) {
-		usuario.recargarSaldo(monto);
-		notificar("Se recargo saldo para el celular: " + usuario.getCelular() + "por un monto de: " + monto );
+	public void recargarSaldo(double monto, String patente) {
+		buscarUsuarioPorPatente(patente).ifPresent(u -> u.recargarSaldo(monto));
+		
+		String celular = buscarUsuarioPorPatente(patente)
+                			.map(AppUsuario::getCelular)
+                			.orElse("Número de celular no encontrado");
+		
+		notificar("Se recargo saldo para el celular: " + celular + "por un monto de: " + monto );
+	}
+	
+	public Optional<AppUsuario> buscarUsuarioPorPatente(String patente) {
+		return usuarios.stream().filter(u -> u.getPatente().equals(patente))
+								.findFirst();
 	}
 
 }

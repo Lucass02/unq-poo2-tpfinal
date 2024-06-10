@@ -2,26 +2,30 @@ package ar.edu.unq.po2.tpFinal.puntoDeVenta;
 
 import java.time.LocalDate;
 
-import ar.edu.unq.po2.tpFinal.estacionamiento.Usuario;
-import ar.edu.unq.po2.tpFinal.sem.Sem;
 
 public class CompraPuntual extends Compra {
     private double cantidadDeHsCompradas;
 
+    //Constructor
+    
 	public CompraPuntual(int numeroControl, PuntoDeVenta puntoDeVenta, LocalDate fecha, LocalDate hora,
 			double cantidadDeHsCompradas) {
 		super(numeroControl, puntoDeVenta, fecha, hora);
 		this.cantidadDeHsCompradas = cantidadDeHsCompradas;
 	}
 
+	//Methods
+	
 	@Override
-	public void realizarCompra(Sem sem, PuntoDeVenta puntoDeVenta, Usuario usuario) {
+	public void realizarCompra(PuntoDeVenta puntoDeVenta, String patente) {
 		//Logica para registrar la compra dentro del punto de venta
         puntoDeVenta.registrarCompra(this);
         
         // Lógica para realizar una compra puntual desde sem
-        sem.asignarEstacionamiento(puntoDeVenta.getZona(), usuario, cantidadDeHsCompradas);
+        puntoDeVenta.getSem().asignarEstacionamiento(puntoDeVenta.getZona(), patente, cantidadDeHsCompradas);
         
 	}
+	
+	//Getters y Setters
     
 }

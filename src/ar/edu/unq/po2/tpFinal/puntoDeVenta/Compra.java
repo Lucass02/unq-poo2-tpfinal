@@ -2,9 +2,6 @@ package ar.edu.unq.po2.tpFinal.puntoDeVenta;
 
 import java.time.LocalDate;
 
-import ar.edu.unq.po2.tpFinal.estacionamiento.Usuario;
-import ar.edu.unq.po2.tpFinal.sem.Sem;
-
 
 public abstract class Compra {
 	private int numeroControl;
@@ -12,12 +9,21 @@ public abstract class Compra {
 	private LocalDate fecha;
 	private LocalDate hora;
 	
+	//Constructor
+	
 	public Compra(int numeroControl, PuntoDeVenta puntoDeVenta, LocalDate fecha, LocalDate hora) {
 		this.numeroControl = numeroControl;
 		this.puntoDeVenta = puntoDeVenta;
 		this.fecha = fecha;
 		this.hora = hora;
 	}
+	
+	//Methods
+	
+	//Al hacer una compra con la patente no hace falta que el usuario posea la app, en caso de ser una recarga, se busca al celular mediante la patente.
+	public abstract void realizarCompra(PuntoDeVenta puntoDeVenta, String patente);
+	
+	//Getters y Setters
 	
 	public int getNumeroControl() {
 		return numeroControl;
@@ -51,5 +57,4 @@ public abstract class Compra {
 		this.hora = hora;
 	}
 	
-	public abstract void realizarCompra(Sem sem, PuntoDeVenta puntoDeVenta, Usuario usuario);
 }

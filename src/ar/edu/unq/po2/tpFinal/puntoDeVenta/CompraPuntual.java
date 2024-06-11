@@ -1,15 +1,16 @@
 package ar.edu.unq.po2.tpFinal.puntoDeVenta;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 public class CompraPuntual extends Compra {
-    private double cantidadDeHsCompradas;
+    private int cantidadDeHsCompradas;
 
     //Constructor
     
 	public CompraPuntual(int numeroControl, PuntoDeVenta puntoDeVenta, LocalDate fecha, LocalDate hora,
-			double cantidadDeHsCompradas) {
+			int cantidadDeHsCompradas) {
 		super(numeroControl, puntoDeVenta, fecha, hora);
 		this.cantidadDeHsCompradas = cantidadDeHsCompradas;
 	}
@@ -18,8 +19,9 @@ public class CompraPuntual extends Compra {
 	
 	@Override
 	public void realizarCompra(String patente) {
+		LocalDateTime horaInicio = LocalDateTime.now();
         this.getPuntoDeVenta().registrarCompra(this);
-        this.getPuntoDeVenta().getSem().asignarEstacionamiento(this.getPuntoDeVenta().getZona(), patente, cantidadDeHsCompradas);
+        this.getPuntoDeVenta().getSem().asignarEstacionamientoPorCompraPuntual(patente, this.getPuntoDeVenta().getZona(), horaInicio, cantidadDeHsCompradas);;
 	}
 
 
@@ -29,7 +31,7 @@ public class CompraPuntual extends Compra {
 		return cantidadDeHsCompradas;
 	}
 
-	public void setCantidadDeHsCompradas(double cantidadDeHsCompradas) {
+	public void setCantidadDeHsCompradas(int cantidadDeHsCompradas) {
 		this.cantidadDeHsCompradas = cantidadDeHsCompradas;
 	}
 	

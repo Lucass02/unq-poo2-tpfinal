@@ -11,22 +11,26 @@ public class Estacionamiento {
 	private EstadoEstacionamiento estado;
     private ZonaDeEstacionamiento zona;
 
-    public Estacionamiento(String patente,ZonaDeEstacionamiento zona) {
+    public Estacionamiento(String patente,ZonaDeEstacionamiento zona, LocalDateTime inicio) {
         this.patente = patente;
         this.zona = zona;
-        this.inicio = LocalDateTime.now();
+        this.inicio = inicio;
         this.estado = new EstacionamientoIniciado();
     }
     /* Métodos */
     
-    //public void iniciarEstacionamiento() {
-	//	this.estado.iniciarEstacionamiento(this);
-	//}
+    public void iniciarEstacionamiento() {
+    	this.estado.iniciarEstacionamiento(this);
+	}
 
-	//public void finalizarEstacionamiento() {
-	//	this.estado.finalizarEstacionamiento(this);
-	//}  
+	public void finalizarEstacionamiento() {
+		this.estado.finalizarEstacionamiento(this);
+	}  
     
+	public boolean estaVigente() {
+	    return this.estado.estaVigente(this);
+	}
+	
     /* Getters y Setters*/
 	
 	public void setEstado(EstadoEstacionamiento estadoActual) {

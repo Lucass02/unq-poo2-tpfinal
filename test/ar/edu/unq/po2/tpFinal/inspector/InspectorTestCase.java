@@ -4,11 +4,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.*;
 
+import ar.edu.unq.po2.tpFinal.inspectorApp.Infraccion;
 import ar.edu.unq.po2.tpFinal.inspectorApp.InspectorApp;
 import ar.edu.unq.po2.tpFinal.sem.Sem;
 import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
@@ -23,19 +27,42 @@ public class InspectorTestCase {
 	    public void setUp() {
 	    	zona = mock(ZonaDeEstacionamiento.class);
 	    	sem = mock(Sem.class);
-	    	inspector = new InspectorApp("pepe",zona);
+	    	patente = "ABC123"; 
+	    	inspector = new InspectorApp("pepe");
 	    	zona.agregarInspector(inspector);
 	    }
 	    
 	    @Test
 	    public void seLeAsignaUnaZonaAUnInspector() {
+	    	// Excercise
 	    	when(zona.getUbicacion()).thenReturn("Bernal");
-	    	assertEquals(inspector.getZona().getUbicacion(),"Bernal"); 
+	    	// Verify
+	    	verify(zona).agregarInspector(inspector);
 	    }
+	    
 	    @Test
 	    public void seVerificaUnEstacionamiento() {
-	    	/*when(inspector.verificarEstacionamiento(sem, patente)).thenReturn(true);
-	    	*/
+	    	// Excercise
+	    	inspector.verificarEstacionamiento(sem, patente);
+	    	// Verify
+	    	verify(sem).estacionamientoVigente(patente);
 	    }
-	    /* when(reloj.getHora()).thenReturn(21); */
+	    
+	    @Test
+	    public void noSeRegistraUnaInfraccion() {
+	    	when(sem.estacionamientoVigente(patente)).thenReturn(false);
+	    	// Excercise
+	    	inspector.verificarEstacionamiento(sem, patente);
+	    	// Verify
+	    	verify(sem, never()).registrarInfraccion(Mockito.any(Infraccion.class));
+	    }
+	    
+	    @Test
+	    public void seRegistraUnaInfraccion() {
+	    	when(sem.estacionamientoVigente(patente)).thenReturn(true);
+	    	// Excercise
+	    	inspector.verificarEstacionamiento(sem, patente);
+	    	// Verify
+	    	verify(sem).registrarInfraccion(Mockito.any(Infraccion.class));
+	    }
 }

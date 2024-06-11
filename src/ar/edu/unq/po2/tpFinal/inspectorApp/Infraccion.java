@@ -2,50 +2,34 @@ package ar.edu.unq.po2.tpFinal.inspectorApp;
 
 import java.time.LocalDateTime;
 
+import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
+
 public class Infraccion {
-    private static int contador = 0;
-    private int id;
     private InspectorApp inspector;
     private LocalDateTime fechaHora;
     private String patente;
+    private ZonaDeEstacionamiento zona;
 
-    public Infraccion(InspectorApp inspector, String patente) {
-        this.id = ++contador;
+	public Infraccion(InspectorApp inspector, String patente) {
         this.inspector = inspector;
-        this.patente = patente;
         this.fechaHora = LocalDateTime.now();
+        this.patente = patente;
+        this.zona = inspector.getZona();
     }
-    
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public String getPatente() {
 		return patente;
-	}
-
-	public void setPatente(String patente) {
-		this.patente = patente;
 	}
 
 	public InspectorApp getInspector() {
 		return inspector;
 	}
 
-	public void setInspector(InspectorApp inspector) {
-		this.inspector = inspector;
-	}
-
 	public LocalDateTime getFechaHora() {
 		return fechaHora;
 	}
 
-	public void setFechaHora(LocalDateTime fechaHora) {
-		this.fechaHora = fechaHora;
+    public ZonaDeEstacionamiento getZona() {
+		return zona;
 	}
-
 }

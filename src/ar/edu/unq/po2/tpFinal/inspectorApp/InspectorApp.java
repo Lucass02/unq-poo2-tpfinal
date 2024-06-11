@@ -7,18 +7,17 @@ public class InspectorApp {
     private String nombre;
     private ZonaDeEstacionamiento zona;
 
-    public InspectorApp(String nombre, ZonaDeEstacionamiento zona) {
+    public InspectorApp(String nombre) {
         this.nombre = nombre;
-        this.zona = zona;
+        this.zona = null;
     }
-    /*
-    public void verificarZona(Sem sem) {
-        this.zona.getEstacionamientos().stream().filter(estacionamiento -> !estacionamiento.estaVigente())
-        										.registrarInfraccion(sem, estacionamiento.getPatente());
-    }
-    */
+    
     public boolean verificarEstacionamiento(Sem sem, String patente) {
-        return sem.estacionamientoVigente(patente);
+    	boolean elEstacionamientoEstaVigente = sem.estacionamientoVigente(patente);
+        if (elEstacionamientoEstaVigente) {
+        	registrarInfraccion(sem,patente);
+        }
+        return elEstacionamientoEstaVigente;
     }
     
     public void registrarInfraccion(Sem sem, String patente) {
@@ -34,16 +33,8 @@ public class InspectorApp {
 		return nombre;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
 	public ZonaDeEstacionamiento getZona() {
 		return zona;
-	}
-
-	public void setZona(ZonaDeEstacionamiento zona) {
-		this.zona = zona;
 	}
 
 }

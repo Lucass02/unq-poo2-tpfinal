@@ -13,10 +13,11 @@ public class ZonaDeEstacionamiento {
     private List<Estacionamiento> estacionamientos;
     private InspectorApp inspector;
 
-    public ZonaDeEstacionamiento(String ubicacion, InspectorApp inspector) {
+    public ZonaDeEstacionamiento(String ubicacion) {
         this.ubicacion = ubicacion;
         this.puntosDeVentas = new ArrayList<PuntoDeVenta>();
-        this.inspector = inspector;
+        this.estacionamientos = new ArrayList<Estacionamiento>();
+        this.inspector = null;
     }
     
     public void agregarInspector(InspectorApp inspector) {
@@ -24,16 +25,29 @@ public class ZonaDeEstacionamiento {
     	this.inspector = inspector;
     }
     
-    public void agregarPuntoVenta(PuntoDeVenta puntoDeVenta) {
+    public void agregarPuntoDeVenta(PuntoDeVenta puntoDeVenta) {
     	puntosDeVentas.add(puntoDeVenta);
     }
-
+    
+    public void iniciarEstacionamiento(String patente) {
+    	Estacionamiento estacionamiento = new Estacionamiento(patente);
+    	this.estacionamientos.add(estacionamiento);
+    }
+    
+    public void finEstacionamiento(String patente) {
+    	Estacionamiento estacionamiento = encontrarEstacionamiento(patente);
+    	this.estacionamientos.remove(estacionamiento);
+    }
+    
+    public Estacionamiento encontrarEstacionamiento(String patente) {
+    	return estacionamientos.stream()
+				               .filter(e -> e.getPatente().equals(patente))
+				               .findFirst()
+				               .orElseThrow(() -> new RuntimeException("No se encontró un Estacionamiento con el usuario dado."));
+    }
+    
 	public String getUbicacion() {
 		return ubicacion;
-	}
-
-	public void setUbicacion(String ubicacion) {
-		this.ubicacion = ubicacion;
 	}
 
 	public List<PuntoDeVenta> getPuntosDeVentas() {
@@ -42,10 +56,6 @@ public class ZonaDeEstacionamiento {
 
 	public InspectorApp getInspector() {
 		return inspector;
-	}
-
-	public void setInspector(InspectorApp inspector) {
-		this.inspector = inspector;
 	}
 
 	public List<Estacionamiento> getEstacionamientos() {

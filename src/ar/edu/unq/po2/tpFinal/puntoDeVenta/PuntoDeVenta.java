@@ -13,9 +13,10 @@ public class PuntoDeVenta {
 
 	//Constructor
 	
-    public PuntoDeVenta(int id, ZonaDeEstacionamiento zona) {
+    public PuntoDeVenta(int id, ZonaDeEstacionamiento zona, Sem sem) {
         this.id = id;
         this.zona = zona;
+        this.sem = sem;
         this.comprasRealizadas = new ArrayList<Compra>();
     }
         

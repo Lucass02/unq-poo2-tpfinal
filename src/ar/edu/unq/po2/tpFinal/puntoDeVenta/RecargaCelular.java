@@ -18,13 +18,20 @@ public class RecargaCelular extends Compra {
     //Methods
     
 	@Override
-	public void realizarCompra(PuntoDeVenta puntoDeVenta, String patente) {
-		puntoDeVenta.registrarCompra(this);
-		puntoDeVenta.getSem().recargarSaldo(monto, patente);;
+	public void realizarCompra(String patente) {
+		this.getPuntoDeVenta().registrarCompra(this);
+		this.getPuntoDeVenta().getSem().recargarSaldo(monto, patente);;
 	}
 
-
+	
 	//Getters y Setters
     
+	public double getMonto() {
+		return monto;
+	}
+
+	public void setMonto(double monto) {
+		this.monto = monto;
+	}
 
 }

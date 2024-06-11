@@ -21,7 +21,7 @@ public abstract class Compra {
 	//Methods
 	
 	//Al hacer una compra con la patente no hace falta que el usuario posea la app, en caso de ser una recarga, se busca al celular mediante la patente.
-	public abstract void realizarCompra(PuntoDeVenta puntoDeVenta, String patente);
+	public abstract void realizarCompra(String patente);
 	
 	//Getters y Setters
 	

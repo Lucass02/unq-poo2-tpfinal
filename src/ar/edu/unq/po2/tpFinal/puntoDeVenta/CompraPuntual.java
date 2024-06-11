@@ -17,15 +17,22 @@ public class CompraPuntual extends Compra {
 	//Methods
 	
 	@Override
-	public void realizarCompra(PuntoDeVenta puntoDeVenta, String patente) {
-		//Logica para registrar la compra dentro del punto de venta
-        puntoDeVenta.registrarCompra(this);
-        
-        // Lógica para realizar una compra puntual desde sem
-        puntoDeVenta.getSem().asignarEstacionamiento(puntoDeVenta.getZona(), patente, cantidadDeHsCompradas);
-        
+	public void realizarCompra(String patente) {
+        this.getPuntoDeVenta().registrarCompra(this);
+        this.getPuntoDeVenta().getSem().asignarEstacionamiento(this.getPuntoDeVenta().getZona(), patente, cantidadDeHsCompradas);
+	}
+
+
+	//Getters y Setters
+	
+	public double getCantidadDeHsCompradas() {
+		return cantidadDeHsCompradas;
+	}
+
+	public void setCantidadDeHsCompradas(double cantidadDeHsCompradas) {
+		this.cantidadDeHsCompradas = cantidadDeHsCompradas;
 	}
 	
-	//Getters y Setters
-    
+	
+	
 }

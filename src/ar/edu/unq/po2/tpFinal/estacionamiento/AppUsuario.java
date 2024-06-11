@@ -41,14 +41,8 @@ public class AppUsuario implements MovementSensor{
 	public void recargarSaldo(double monto) {
 	    this.saldo += monto;
 	} 
-	  
-	public void iniciarEstacionamiento(Sem sem, Reloj reloj) {
-    	this.estado.iniciarEstacionamiento(this, sem, reloj);
-    }
-
-	public void finalizarEstacionamiento(Sem sem) {
-    	this.estado.finalizarEstacionamiento(this, sem);
-    }
+	
+	
     
     public void recibirNotificacion(String notificacion) {
         System.out.println(notificacion);

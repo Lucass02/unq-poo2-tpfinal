@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unq.po2.tpFinal.estacionamiento.Estacionamiento;
+import ar.edu.unq.po2.tpFinal.estacionamiento.EstacionamientoPorApp;
+import ar.edu.unq.po2.tpFinal.estacionamiento.EstacionamientoPorCompraPuntual;
 import ar.edu.unq.po2.tpFinal.inspectorApp.InspectorApp;
 import ar.edu.unq.po2.tpFinal.puntoDeVenta.PuntoDeVenta;
 
@@ -29,8 +31,15 @@ public class ZonaDeEstacionamiento {
     	puntosDeVentas.add(puntoDeVenta);
     }
     
-    public void iniciarEstacionamiento(String patente) {
-    	Estacionamiento estacionamiento = new Estacionamiento(patente);
+    public void iniciarEstacionamientoApp(String patente, String celular) {
+    	Estacionamiento estacionamiento = new EstacionamientoPorApp(patente, celular);
+    	estacionamiento.iniciarEstacionamiento();
+    	this.estacionamientos.add(estacionamiento);
+    }
+    
+    public void iniciarEstacionamientoCompraPuntual(String patente, int cantidadDeHsCompradas) {
+    	Estacionamiento estacionamiento = new EstacionamientoPorCompraPuntual(patente, cantidadDeHsCompradas);
+    	estacionamiento.iniciarEstacionamiento();
     	this.estacionamientos.add(estacionamiento);
     }
     
@@ -41,11 +50,15 @@ public class ZonaDeEstacionamiento {
     
     public Estacionamiento encontrarEstacionamiento(String patente) {
     	return estacionamientos.stream()
-				               .filter(e -> e.getPatente().equals(patente))
+				               .filter(estacionamiento -> estacionamiento.getPatente().equals(patente))
 				               .findFirst()
 				               .orElseThrow(() -> new RuntimeException("No se encontró un Estacionamiento con el usuario dado."));
     }
     
+    public boolean estacionamientoVigente(String patente) {
+    	return estacionamientos.stream().anyMatch(estacionamiento -> estacionamiento.getPatente().equals(patente));
+    }
+
 	public String getUbicacion() {
 		return ubicacion;
 	}

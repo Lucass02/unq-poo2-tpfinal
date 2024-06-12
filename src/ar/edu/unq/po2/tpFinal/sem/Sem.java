@@ -22,7 +22,6 @@ public class Sem implements INotificador {
     
     public Sem() {
         this.zonas = new ArrayList<ZonaDeEstacionamiento>();
-        this.estacionamientos = new ArrayList<Estacionamiento>();
         this.infracciones = new ArrayList<Infraccion>();
         this.usuarios = new ArrayList<AppUsuario>();
         this.suscriptores = new ArrayList<ISuscriptor>();
@@ -42,15 +41,21 @@ public class Sem implements INotificador {
     	suscriptores.stream().forEach(s -> s.actualizar(evento));
     }
     
-    
 	//Estacionamiento
-	
-	public void asignarEstacionamientoPorApp(String patente, ZonaDeEstacionamiento zona, LocalDateTime inicio, String celular) {
-		if (!estacionamientoVigente(patente) && esFranjaHoraria(inicio)) {
-			Estacionamiento nuevoEstacionamiento = new EstacionamientoPorApp(patente, zona, inicio, celular);
-			nuevoEstacionamiento.iniciarEstacionamiento();
-			estacionamientos.add(nuevoEstacionamiento);
-			notificar("Se inicio el estacionamiento para la patente: " + patente);
+	public void iniciarEstacionamientoApp(ZonaDeEstacionamiento zona, String patente, String celular) {
+		ZonaDeEstacionamiento zonaActual = encontrarZona(zona);
+		if (zonaActual.estacionamientoVigente(patente) && esFranjaHoraria()) {
+			zonaActual.iniciarEstacionamientoApp(patente,celular);
+			notificar("Se inició estacionamiento para patente" + patente);
+		} else {
+			System.out.println("El usuario ya tiene un estacionamiento activo o el horario esta fuera de la franja horaria");
+		}
+	}
+	public void iniciarEstacionamientoCompraPuntual(ZonaDeEstacionamiento zona, String patente, int cantidadDeHsCompradas) {
+		ZonaDeEstacionamiento zonaActual = encontrarZona(zona);
+		if (zonaActual.estacionamientoVigente(patente) && esFranjaHoraria()) {
+			zonaActual.iniciarEstacionamientoCompraPuntual(patente,cantidadDeHsCompradas);
+			notificar("Se inició estacionamiento para patente" + patente);
 		} else {
 			System.out.println("El usuario ya tiene un estacionamiento activo o el horario esta fuera de la franja horaria");
 		}
@@ -85,36 +90,21 @@ public class Sem implements INotificador {
         }
         estacionamientos.clear();
     }
-	
-    public boolean estacionamientoVigente(String patente) {
-    	return estacionamientos.stream().anyMatch(estacionamiento -> estacionamiento.getPatente().equals(patente));
-    }
     
-    public Estacionamiento estacionamientoDePatente(String patente) {
-    	return estacionamientos.stream()
-    								  .filter(e -> e.getPatente().equals(patente))
-    								  .findFirst()
-    								  .orElseThrow(() -> new RuntimeException("No se encontró un Estacionamiento con el usuario dado."));
-    }
-
+    private ZonaDeEstacionamiento encontrarZona(ZonaDeEstacionamiento zona) {
+		ZonaDeEstacionamiento zonaActual = (this.zonas.stream()
+							.filter(zonaDeEstacionamiento -> zonaDeEstacionamiento.getUbicacion().equals(zona.getUbicacion()))
+						    .findFirst()
+						    .orElseThrow(() -> new RuntimeException("No existe la zona dentro del sistema")));
+		return zonaActual;
+	}
     
-    public boolean esFranjaHoraria(LocalDateTime horaInicioEstacionamiento) {
+    public boolean esFranjaHoraria() {
     	LocalDateTime ahora = LocalDateTime.now();
     	LocalDateTime horaInicioDeFranjaHoraria = LocalDateTime.of(ahora.getYear(), ahora.getMonth(), ahora.getDayOfMonth(), 7, 0);
     	LocalDateTime horaFinDeFranjaHoraria = LocalDateTime.of(ahora.getYear(), ahora.getMonth(), ahora.getDayOfMonth(), 20, 0);
-    	return (horaInicioEstacionamiento.isAfter(horaInicioDeFranjaHoraria) && horaInicioEstacionamiento.isBefore(horaFinDeFranjaHoraria));
+    	return (ahora.isAfter(horaInicioDeFranjaHoraria) && ahora.isBefore(horaFinDeFranjaHoraria));
     }  
-    
-    /* PARA QUE SE REQUERIA??
-    public boolean consultarEstacionamiento(String patente) {
-        for (Estacionamiento e : estacionamientosActivos) {
-            if (e.getVehiculo().getPatente().equals(patente) && e.estaVigente()) {
-                return true;
-            }
-        }
-        return false;
-    }
-    */
     
 	//Recarga Celular
 	
@@ -160,10 +150,5 @@ public class Sem implements INotificador {
 	public List<Infraccion> getInfracciones() {
 		return infracciones;
 	}
-
-	public List<Estacionamiento> getEstacionamientos() {
-		return estacionamientos;
-	}
-
 	
 }

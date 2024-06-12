@@ -11,7 +11,6 @@ public class AppUsuario implements MovementSensor{
     private String celular;
     private String patente;
 	private double saldo;
-    private List<Estacionamiento> estacionamientos;
     private ModoApp modo;
     private Gps gps;
 	private EstadoEstacionamiento estado;
@@ -27,7 +26,6 @@ public class AppUsuario implements MovementSensor{
 			this.celular = celular;
 			this.patente = patente;
 			this.saldo = 0;
-			this.estacionamientos = new ArrayList<Estacionamiento>();
 			this.modo = modo;
 			this.gps = gps;
 			this.estado = estado;
@@ -42,7 +40,13 @@ public class AppUsuario implements MovementSensor{
 	    this.saldo += monto;
 	} 
 	
+	public void iniciarEstacionamiento(Gps gps) {
+		this.sem.asignarEstacionamientoPorApp(this.patente, gps.getZona(), this.celular);
+	}
 	
+	public void finalizarEstacionamiento() {
+		this.sem.finalizarEstacionamiento(patente);
+	}
     
     public void recibirNotificacion(String notificacion) {
         System.out.println(notificacion);
@@ -84,14 +88,6 @@ public class AppUsuario implements MovementSensor{
 	public void setEstado(EstadoEstacionamiento estadoActual) {
 		this.estado = estadoActual;
 	}
-    
-    public void agregarEstacionamiento(Estacionamiento estacionamiento) {
-        estacionamientos.add(estacionamiento);
-    }
-
-    public List<Estacionamiento> getEstacionamientos() {
-        return estacionamientos;
-    }
 
 	public String getCelular() {
 		return celular;

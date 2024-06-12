@@ -9,13 +9,12 @@ public class EstacionamientoPorCompraPuntual extends Estacionamiento {
 
 	//Constructor
 	
-	public EstacionamientoPorCompraPuntual(String patente, ZonaDeEstacionamiento zona, LocalDateTime inicio, int cantidadDeHsCompradas) {
-		super(patente, zona, inicio);
+	public EstacionamientoPorCompraPuntual(String patente, int cantidadDeHsCompradas) {
+		super(patente);
 		this.cantidadDeHsCompradas = cantidadDeHsCompradas;
 	}
-	
 	//Methods
-
+	
 	@Override
 	public void iniciarEstacionamiento() {
 		super.iniciarEstacionamiento();

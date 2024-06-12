@@ -9,12 +9,10 @@ public class Estacionamiento {
     private LocalDateTime fin;
     private String patente;
 	private EstadoEstacionamiento estado;
-    private ZonaDeEstacionamiento zona;
 
-    public Estacionamiento(String patente,ZonaDeEstacionamiento zona, LocalDateTime inicio) {
+    public Estacionamiento(String patente) {
         this.patente = patente;
-        this.zona = zona;
-        this.inicio = inicio;
+        this.inicio = LocalDateTime.now();
         this.estado = new EstacionamientoIniciado();
     }
     /* Métodos */
@@ -55,14 +53,6 @@ public class Estacionamiento {
 
 	public void setFin(LocalDateTime fin) {
 		this.fin = fin;
-	}
-
-	public ZonaDeEstacionamiento getZona() {
-		return zona;
-	}
-
-	public void setZona(ZonaDeEstacionamiento zona) {
-		this.zona = zona;
 	}
 	
 	public String getPatente() {

@@ -10,12 +10,11 @@ public class EstacionamientoPorApp extends Estacionamiento {
 
 	//Constructor
 	
-	public EstacionamientoPorApp(String patente, ZonaDeEstacionamiento zona, LocalDateTime inicio,
-			String celular) {
-		super(patente, zona, inicio);
+	public EstacionamientoPorApp(String patente, String celular) {
+		super(patente);
 		this.celular = celular;
 	}
-
+	/*LA HORA FIN SE CALCULA POR EL CARGA HASTA EL MAXIMO DE LA FRANJA HORARIA O HASTA DONDE DE*/
 	
 	//Methods
 	

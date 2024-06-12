@@ -14,7 +14,7 @@ import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
 
 public class Sem implements INotificador {
     private List<ZonaDeEstacionamiento> zonas;
-    private List<Estacionamiento> estacionamientos;
+    private List<Estacionamiento> estacionamientosActivos;
     private List<Infraccion> infracciones;
     private List<AppUsuario> usuarios;
     private List<ISuscriptor> suscriptores;
@@ -22,6 +22,7 @@ public class Sem implements INotificador {
     
     public Sem() {
         this.zonas = new ArrayList<ZonaDeEstacionamiento>();
+        this.estacionamientosActivos = new ArrayList<Estacionamiento>();
         this.infracciones = new ArrayList<Infraccion>();
         this.usuarios = new ArrayList<AppUsuario>();
         this.suscriptores = new ArrayList<ISuscriptor>();
@@ -60,17 +61,7 @@ public class Sem implements INotificador {
 			System.out.println("El usuario ya tiene un estacionamiento activo o el horario esta fuera de la franja horaria");
 		}
 	}
-	
-	public void asignarEstacionamientoPorCompraPuntual(String patente, ZonaDeEstacionamiento zona, LocalDateTime inicio, int cantidadDeHsCompradas) {
-		if (!estacionamientoVigente(patente) && esFranjaHoraria(inicio)) {
-			Estacionamiento nuevoEstacionamiento = new EstacionamientoPorCompraPuntual(patente, zona, inicio, cantidadDeHsCompradas);
-			nuevoEstacionamiento.iniciarEstacionamiento();
-			estacionamientos.add(nuevoEstacionamiento);
-		} else {
-			System.out.println("El usuario ya tiene un estacionamiento activo o el horario esta fuera de la franja horaria");
-		}
-	}
-	
+
 	public void finalizarEstacionamiento(String patente) {
     	if (estacionamientoVigente(patente)) {
     		Estacionamiento estacionamiento = estacionamientoDePatente(patente);
@@ -81,7 +72,18 @@ public class Sem implements INotificador {
             System.out.println("El usuario no tiene ningún estacionamiento activo");
         }
     }
-
+	/*
+	public void finalizarEstacionamiento(String patente) {
+    	if (estacionamientoVigente(patente)) {
+    		Estacionamiento estacionamiento = estacionamientoDePatente(patente);
+    		estacionamiento.finalizarEstacionamiento();
+    		estacionamientos.remove(estacionamiento);
+    		notificar("Se finalizo el estacionamiento para la patente: " + patente);
+    	} else {
+            System.out.println("El usuario no tiene ningún estacionamiento activo");
+        }
+    }
+	*/
     public void finalizarTodosLosEstacionamientos() {
         for (Estacionamiento e : estacionamientos) {
             if (e.estaVigente()) {

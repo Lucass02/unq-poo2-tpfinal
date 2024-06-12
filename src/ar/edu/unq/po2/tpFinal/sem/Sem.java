@@ -50,7 +50,6 @@ public class Sem implements INotificador {
 		//Devolverle la informacion del estacionamiento al usuario
 		if (estaLaZonaAEstacionarDentroDeLasZonasDelSem(usuario.getZona()) && !estacionamientoVigente(usuario.getPatente()) && esFranjaHoraria()) {
 			Estacionamiento nuevoEstacionamiento = new EstacionamientoPorApp(usuario.getPatente(), celular);
-			nuevoEstacionamiento.iniciarEstacionamiento();
 			estacionamientos.add(nuevoEstacionamiento);
 			notificar("Se inicio el estacionamiento para la patente: " + usuario.getPatente());
 		} else {
@@ -62,7 +61,6 @@ public class Sem implements INotificador {
 		//ZonaDeEstacionamiento zonaActual = encontrarZona(zona);
 		if (estaLaZonaAEstacionarDentroDeLasZonasDelSem(zona) && !estacionamientoVigente(patente) && esFranjaHoraria()) {
 			Estacionamiento nuevoEstacionamiento = new EstacionamientoPorCompraPuntual (patente, cantidadDeHsCompradas);
-			nuevoEstacionamiento.iniciarEstacionamiento();
 			estacionamientos.add(nuevoEstacionamiento);
 			notificar("Se inicio el estacionamiento para la patente: " + patente);
 		} else {
@@ -75,7 +73,6 @@ public class Sem implements INotificador {
 		//Devolverle la informacion del estacionamiento al usuario 
     	if (estacionamientoVigente(usuario.getPatente())) {
     		Estacionamiento estacionamiento = estacionamientoDePatente(usuario.getPatente());
-    		estacionamiento.finalizarEstacionamiento();
     		estacionamientos.remove(estacionamiento);
     		notificar("Se finalizo el estacionamiento para la patente: " + usuario.getPatente());
     	} else {
@@ -86,7 +83,6 @@ public class Sem implements INotificador {
 	public void finalizarEstacionamiento(String patente) {
     	if (estacionamientoVigente(patente)) {
     		Estacionamiento estacionamiento = estacionamientoDePatente(patente);
-    		estacionamiento.finalizarEstacionamiento();
     		estacionamientos.remove(estacionamiento);
     		notificar("Se finalizo el estacionamiento para la patente: " + patente);
     	} else {

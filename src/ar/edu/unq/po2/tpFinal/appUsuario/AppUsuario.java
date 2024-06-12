@@ -1,6 +1,5 @@
 package ar.edu.unq.po2.tpFinal.appUsuario;
 
-import ar.edu.unq.po2.tpFinal.estacionamiento.EstadoEstacionamiento;
 import ar.edu.unq.po2.tpFinal.sem.Sem;
 import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
 
@@ -11,21 +10,18 @@ public class AppUsuario implements MovementSensor{
     private ModoApp modo;
     private Gps gps;
 	private EstadoEstacionamiento estado;
-	private Asistencia asistencia;
 	private Sem sem;
 
 	//Constructor
 	
 	  public AppUsuario(String celular, String patente, double saldo,
-				ModoApp modo, Gps gps, EstadoEstacionamiento estado, Asistencia asistencia, Sem sem) {
-			super();
+				ModoApp modo, Gps gps, Sem sem) {
 			this.celular = celular;
 			this.patente = patente;
 			this.saldo = 0;
 			this.modo = modo;
 			this.gps = gps;
-			this.estado = estado;
-			this.asistencia = asistencia;
+			this.estado = new EstacionamientoSinIniciar();
 			this.sem = sem;
 		}
 	
@@ -46,15 +42,16 @@ public class AppUsuario implements MovementSensor{
     public void recibirInformacionDeEstacionamiento(String informacion) {
         System.out.println(informacion);
     }
-
+    
+    /* INTERFAZ MOVEMENT SENSOR */
 	@Override
 	public void driving() {
-		this.estado.driving(this, this.sem);
+		this.modo.driving(this);
 	}
 
 	@Override
 	public void walking() {
-		this.estado.walking(this, this.sem);
+		this.modo.walking(this);
 	}
 	
 	//Getters y Setters
@@ -63,22 +60,9 @@ public class AppUsuario implements MovementSensor{
     	return gps.getZona();  
     }
     
-    public void setModoManual() {
-    	this.modo =  new ModoManual();
+    public void setModo(ModoApp modo) {
+    	this.modo = modo;
     }
-    
-    public void setModoAutomatico() {
-    	this.modo =  new ModoAutomatico();
-    	this.asistencia = new AsistenciaActivada();
-    }
-    
-	public void setAsistenciaActivada() {
-		this.asistencia = new AsistenciaActivada();
-	}
-	
-	public void setAsistenciaDesactivada() {
-		this.asistencia = new AsistenciaDesactivada();
-	}
 	
 	public void setEstado(EstadoEstacionamiento estadoActual) {
 		this.estado = estadoActual;
@@ -108,11 +92,14 @@ public class AppUsuario implements MovementSensor{
 		this.saldo = saldo;
 	}
 
-	public Asistencia getAsistencia() {
-		return this.asistencia;
-	}
-
 	public ModoApp getModo() {
 		return this.modo;
+	}
+	
+	public EstadoEstacionamiento getEstado() {
+		return this.estado;
+	}
+	public Gps getGps() {
+		return this.gps;
 	}
 }

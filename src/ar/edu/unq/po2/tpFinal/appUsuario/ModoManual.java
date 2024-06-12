@@ -5,13 +5,11 @@ import ar.edu.unq.po2.tpFinal.sem.Sem;
 public class ModoManual implements ModoApp{
 
 	@Override
-	public void iniciarEstacionamiento(AppUsuario app, Sem sem) {
-		
+	public void driving(AppUsuario app) {
 	}
 
 	@Override
-	public void finalizarEstacionamiento(AppUsuario app, Sem sem) {
-		
+	public void walking(AppUsuario app) {	
 	}
 	
 }

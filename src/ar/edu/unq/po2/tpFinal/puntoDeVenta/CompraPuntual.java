@@ -19,7 +19,7 @@ public class CompraPuntual extends Compra {
 	@Override
 	public void realizarCompra(String patente) {
         this.getPuntoDeVenta().registrarCompra(this);
-        this.getPuntoDeVenta().getSem().iniciarEstacionamientoCompraPuntual(this.getPuntoDeVenta().getZona(),patente, cantidadDeHsCompradas);;
+        this.getPuntoDeVenta().getSem().iniciarEstacionamientoCompraPuntual(this.getPuntoDeVenta().getZona(),patente, cantidadDeHsCompradas);
 	}
 
 

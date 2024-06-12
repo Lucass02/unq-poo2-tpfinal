@@ -2,40 +2,16 @@ package ar.edu.unq.po2.tpFinal.estacionamiento;
 
 import java.time.LocalDateTime;
 
-public class Estacionamiento {
+public abstract class Estacionamiento {
     private LocalDateTime inicio;
     private LocalDateTime fin;
     private String patente;
-	private EstadoEstacionamiento estado;
 
     public Estacionamiento(String patente) {
         this.patente = patente;
         this.inicio = LocalDateTime.now();
-        this.estado = new EstacionamientoIniciado();
     }
-    /* Métodos */
-    
-    public void iniciarEstacionamiento() {
-    	this.estado.iniciarEstacionamiento(this);
-	}
-
-	public void finalizarEstacionamiento() {
-		this.estado.finalizarEstacionamiento(this);
-	}  
-    
-	public boolean estaVigente() {
-	    return this.estado.estaVigente(this);
-	}
-	
     /* Getters y Setters*/
-	
-	public void setEstado(EstadoEstacionamiento estadoActual) {
-		this.estado = estadoActual;
-	}
-
-	public EstadoEstacionamiento getEstado() {
-		return estado;
-	}
 
 	public LocalDateTime getInicio() {
 		return inicio;

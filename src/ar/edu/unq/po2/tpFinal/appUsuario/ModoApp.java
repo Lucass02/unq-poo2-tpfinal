@@ -4,6 +4,6 @@ import ar.edu.unq.po2.tpFinal.sem.Sem;
 
 public interface ModoApp {
 	
-	public void iniciarEstacionamiento(AppUsuario app, Sem sem);
-	public void finalizarEstacionamiento(AppUsuario app, Sem sem);
+	public void driving(AppUsuario app);
+	public void walking(AppUsuario app);
 }

@@ -6,7 +6,6 @@ import java.util.List;
 import ar.edu.unq.po2.tpFinal.estacionamiento.Estacionamiento;
 import ar.edu.unq.po2.tpFinal.estacionamiento.EstacionamientoPorApp;
 import ar.edu.unq.po2.tpFinal.estacionamiento.EstacionamientoPorCompraPuntual;
-import ar.edu.unq.po2.tpFinal.inspectorApp.InspectorApp;
 import ar.edu.unq.po2.tpFinal.puntoDeVenta.PuntoDeVenta;
 
 public class ZonaDeEstacionamiento {

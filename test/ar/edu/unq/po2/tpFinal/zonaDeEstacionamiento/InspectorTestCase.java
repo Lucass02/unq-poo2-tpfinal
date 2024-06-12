@@ -1,4 +1,4 @@
-package ar.edu.unq.po2.tpFinal.inspector;
+package ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -12,9 +12,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
-import ar.edu.unq.po2.tpFinal.inspectorApp.Infraccion;
-import ar.edu.unq.po2.tpFinal.inspectorApp.InspectorApp;
 import ar.edu.unq.po2.tpFinal.sem.Sem;
+import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.Infraccion;
+import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.InspectorApp;
 import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
 
 public class InspectorTestCase {

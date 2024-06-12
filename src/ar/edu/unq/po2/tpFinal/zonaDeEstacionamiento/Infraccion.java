@@ -1,8 +1,6 @@
-package ar.edu.unq.po2.tpFinal.inspectorApp;
+package ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento;
 
 import java.time.LocalDateTime;
-
-import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
 
 public class Infraccion {
     private InspectorApp inspector;

@@ -1,4 +1,4 @@
-package ar.edu.unq.po2.tpFinal.estacionamiento;
+package ar.edu.unq.po2.tpFinal.appUsuario;
 
 import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
 

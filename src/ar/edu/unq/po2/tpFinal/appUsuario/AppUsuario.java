@@ -1,6 +1,6 @@
-package ar.edu.unq.po2.tpFinal.estacionamiento;
+package ar.edu.unq.po2.tpFinal.appUsuario;
 
-import ar.edu.unq.po2.tpFinal.sem.Reloj;
+import ar.edu.unq.po2.tpFinal.estacionamiento.EstadoEstacionamiento;
 import ar.edu.unq.po2.tpFinal.sem.Sem;
 import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
 
@@ -13,12 +13,11 @@ public class AppUsuario implements MovementSensor{
 	private EstadoEstacionamiento estado;
 	private Asistencia asistencia;
 	private Sem sem;
-	private Reloj reloj;
 
 	//Constructor
 	
 	  public AppUsuario(String celular, String patente, double saldo,
-				ModoApp modo, Gps gps, EstadoEstacionamiento estado, Asistencia asistencia, Sem sem, Reloj reloj) {
+				ModoApp modo, Gps gps, EstadoEstacionamiento estado, Asistencia asistencia, Sem sem) {
 			super();
 			this.celular = celular;
 			this.patente = patente;
@@ -28,7 +27,6 @@ public class AppUsuario implements MovementSensor{
 			this.estado = estado;
 			this.asistencia = asistencia;
 			this.sem = sem;
-			this.reloj = reloj;
 		}
 	
 	//Methods
@@ -38,11 +36,11 @@ public class AppUsuario implements MovementSensor{
 	} 
 	
 	public void iniciarEstacionamiento(Gps gps) {
-		this.sem.iniciarEstacionamientoApp(this.getZona(), patente, celular);
+		this.sem.iniciarEstacionamientoApp(celular);
 	}
 	
 	public void finalizarEstacionamiento() {
-		this.sem.finalizarEstacionamiento(patente);
+		this.sem.finalizarEstacionamiento(celular);
 	}
     
     public void recibirInformacionDeEstacionamiento(String informacion) {
@@ -56,7 +54,7 @@ public class AppUsuario implements MovementSensor{
 
 	@Override
 	public void walking() {
-		this.estado.walking(this, this.sem, this.reloj);
+		this.estado.walking(this, this.sem);
 	}
 	
 	//Getters y Setters

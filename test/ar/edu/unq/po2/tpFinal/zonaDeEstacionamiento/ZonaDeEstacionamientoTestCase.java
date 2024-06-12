@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
 import ar.edu.unq.po2.tpFinal.estacionamiento.Estacionamiento;
-import ar.edu.unq.po2.tpFinal.inspectorApp.InspectorApp;
 import ar.edu.unq.po2.tpFinal.puntoDeVenta.PuntoDeVenta;
 import ar.edu.unq.po2.tpFinal.sem.Sem;
 

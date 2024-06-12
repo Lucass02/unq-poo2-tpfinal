@@ -1,7 +1,6 @@
-package ar.edu.unq.po2.tpFinal.inspectorApp;
+package ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento;
 
 import ar.edu.unq.po2.tpFinal.sem.Sem;
-import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
 
 public class InspectorApp {
     private String nombre;

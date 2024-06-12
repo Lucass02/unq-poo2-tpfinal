@@ -3,13 +3,12 @@ package ar.edu.unq.po2.tpFinal.sem;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import ar.edu.unq.po2.tpFinal.estacionamiento.AppUsuario;
+import ar.edu.unq.po2.tpFinal.appUsuario.AppUsuario;
 import ar.edu.unq.po2.tpFinal.estacionamiento.Estacionamiento;
 import ar.edu.unq.po2.tpFinal.estacionamiento.EstacionamientoPorApp;
 import ar.edu.unq.po2.tpFinal.estacionamiento.EstacionamientoPorCompraPuntual;
-import ar.edu.unq.po2.tpFinal.inspectorApp.Infraccion;
+import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.Infraccion;
 import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
 
 public class Sem implements INotificador {

@@ -2,7 +2,7 @@ package ar.edu.unq.po2.tpFinal.estacionamiento;
 
 import java.time.LocalDateTime;
 
-import ar.edu.unq.po2.tpFinal.sem.Reloj;
+import ar.edu.unq.po2.tpFinal.appUsuario.AppUsuario;
 import ar.edu.unq.po2.tpFinal.sem.Sem;
 
 public class EstacionamientoIniciado implements EstadoEstacionamiento {

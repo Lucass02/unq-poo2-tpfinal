@@ -28,24 +28,27 @@ public class InspectorTestCase {
 	    	zona = mock(ZonaDeEstacionamiento.class);
 	    	sem = mock(Sem.class);
 	    	patente = "ABC123"; 
-	    	inspector = new InspectorApp("pepe");
+	    	inspector = new InspectorApp("Pepe");
 	    	zona.agregarInspector(inspector);
 	    }
 	    
 	    @Test
 	    public void seLeAsignaUnaZonaAUnInspector() {
 	    	// Excercise
+	    	inspector.agregarAZona(zona);
 	    	when(zona.getUbicacion()).thenReturn("Bernal");
 	    	// Verify
 	    	verify(zona).agregarInspector(inspector);
 	    }
 	    
 	    @Test
-	    public void seVerificaUnEstacionamiento() {
+	    public void seVerificaUnEstacionamientoYseRegistraInfraccion() {
+	    	when(sem.estacionamientoVigente(patente)).thenReturn(true);
 	    	// Excercise
 	    	inspector.verificarEstacionamiento(sem, patente);
 	    	// Verify
 	    	verify(sem).estacionamientoVigente(patente);
+	    	verify(sem).registrarInfraccion(Mockito.any(Infraccion.class));
 	    }
 	    
 	    @Test
@@ -64,5 +67,11 @@ public class InspectorTestCase {
 	    	inspector.verificarEstacionamiento(sem, patente);
 	    	// Verify
 	    	verify(sem).registrarInfraccion(Mockito.any(Infraccion.class));
+	    }
+	    
+	    @Test
+	    public void seObtieneElNombreDelInspector() {
+	    	// Verify
+	    	assertEquals(inspector.getNombre(),"Pepe");
 	    }
 }

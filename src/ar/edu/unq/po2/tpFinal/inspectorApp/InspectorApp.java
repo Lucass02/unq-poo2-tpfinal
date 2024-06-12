@@ -13,7 +13,7 @@ public class InspectorApp {
     }
     
     public boolean verificarEstacionamiento(Sem sem, String patente) {
-    	boolean elEstacionamientoEstaVigente = this.zona.estacionamientoVigente(patente);
+    	boolean elEstacionamientoEstaVigente = sem.estacionamientoVigente(patente);
         if (elEstacionamientoEstaVigente) {
         	registrarInfraccion(sem,patente);
         }
@@ -32,7 +32,7 @@ public class InspectorApp {
 	public String getNombre() {
 		return nombre;
 	}
-
+	
 	public ZonaDeEstacionamiento getZona() {
 		return zona;
 	}

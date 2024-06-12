@@ -38,7 +38,7 @@ public class ZonaDeEstacionamientoTestCase {
     	// Verify
     	verify(inspector).agregarAZona(zona);
     }
-	
+    
     @Test
     public void seLeAgregaUnPuntoDeVenta() {
     	// Excercise
@@ -48,19 +48,26 @@ public class ZonaDeEstacionamientoTestCase {
     }
     
     @Test
-    public void seLeAgregaUnEstacionamiento() {
+    public void seQuitaUnPuntoDeVenta() {
     	// Excercise
-    	zona.iniciarEstacionamiento("ABC123");
+    	zona.agregarPuntoDeVenta(punto);
+    	zona.quitarPuntoDeVenta(punto);
     	// Verify
-    	assertFalse(this.zona.getEstacionamientos().isEmpty());
+    	assertTrue(this.zona.getPuntosDeVentas().isEmpty());
     }
     
     @Test
-    public void seFinalizaUnEstacionamiento() {
-    	// Excercise
-    	zona.iniciarEstacionamiento("ABC123");
-    	zona.finEstacionamiento("ABC123");
+    public void seObtieneUbicacionDeLaZona() {
     	// Verify
-    	assertTrue(this.zona.getEstacionamientos().isEmpty());
+    	assertEquals(this.zona.getUbicacion(),"Bernal");
+    }
+    
+    @Test
+    public void seObtieneInspectorDeLaZona() {
+    	// Excercise
+    	zona.agregarInspector(inspector);
+    	when(inspector.getNombre()).thenReturn("Pepe");
+    	// Verify
+    	assertEquals(this.zona.getInspector().getNombre(),"Pepe");
     }
 }

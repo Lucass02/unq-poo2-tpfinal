@@ -12,13 +12,11 @@ import ar.edu.unq.po2.tpFinal.puntoDeVenta.PuntoDeVenta;
 public class ZonaDeEstacionamiento {
     private String ubicacion;
     private List<PuntoDeVenta> puntosDeVentas;
-    private List<Estacionamiento> estacionamientos;
     private InspectorApp inspector;
 
     public ZonaDeEstacionamiento(String ubicacion) {
         this.ubicacion = ubicacion;
         this.puntosDeVentas = new ArrayList<PuntoDeVenta>();
-        this.estacionamientos = new ArrayList<Estacionamiento>();
         this.inspector = null;
     }
     
@@ -31,34 +29,10 @@ public class ZonaDeEstacionamiento {
     	puntosDeVentas.add(puntoDeVenta);
     }
     
-    public void iniciarEstacionamientoApp(String patente, String celular) {
-    	Estacionamiento estacionamiento = new EstacionamientoPorApp(patente, celular);
-    	estacionamiento.iniciarEstacionamiento();
-    	this.estacionamientos.add(estacionamiento);
+    public void quitarPuntoDeVenta(PuntoDeVenta puntoDeVenta) {
+    	puntosDeVentas.remove(puntoDeVenta);
     }
     
-    public void iniciarEstacionamientoCompraPuntual(String patente, int cantidadDeHsCompradas) {
-    	Estacionamiento estacionamiento = new EstacionamientoPorCompraPuntual(patente, cantidadDeHsCompradas);
-    	estacionamiento.iniciarEstacionamiento();
-    	this.estacionamientos.add(estacionamiento);
-    }
-    
-    public void finEstacionamiento(String patente) {
-    	Estacionamiento estacionamiento = encontrarEstacionamiento(patente);
-    	this.estacionamientos.remove(estacionamiento);
-    }
-    
-    public Estacionamiento encontrarEstacionamiento(String patente) {
-    	return estacionamientos.stream()
-				               .filter(estacionamiento -> estacionamiento.getPatente().equals(patente))
-				               .findFirst()
-				               .orElseThrow(() -> new RuntimeException("No se encontró un Estacionamiento con el usuario dado."));
-    }
-    
-    public boolean estacionamientoVigente(String patente) {
-    	return estacionamientos.stream().anyMatch(estacionamiento -> estacionamiento.getPatente().equals(patente));
-    }
-
 	public String getUbicacion() {
 		return ubicacion;
 	}
@@ -69,10 +43,6 @@ public class ZonaDeEstacionamiento {
 
 	public InspectorApp getInspector() {
 		return inspector;
-	}
-
-	public List<Estacionamiento> getEstacionamientos() {
-		return estacionamientos;
 	}
 
 }

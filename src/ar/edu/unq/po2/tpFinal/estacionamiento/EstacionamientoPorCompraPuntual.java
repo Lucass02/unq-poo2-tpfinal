@@ -2,8 +2,6 @@ package ar.edu.unq.po2.tpFinal.estacionamiento;
 
 import java.time.LocalDateTime;
 
-import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
-
 public class EstacionamientoPorCompraPuntual extends Estacionamiento {
 	private int cantidadDeHsCompradas;
 

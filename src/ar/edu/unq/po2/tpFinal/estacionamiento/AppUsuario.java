@@ -1,8 +1,5 @@
 package ar.edu.unq.po2.tpFinal.estacionamiento;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ar.edu.unq.po2.tpFinal.sem.Reloj;
 import ar.edu.unq.po2.tpFinal.sem.Sem;
 import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
@@ -41,15 +38,15 @@ public class AppUsuario implements MovementSensor{
 	} 
 	
 	public void iniciarEstacionamiento(Gps gps) {
-		this.sem.asignarEstacionamientoPorApp(this.patente, gps.getZona(), this.celular);
+		this.sem.iniciarEstacionamientoApp(this.getZona(), patente, celular);
 	}
 	
 	public void finalizarEstacionamiento() {
 		this.sem.finalizarEstacionamiento(patente);
 	}
     
-    public void recibirNotificacion(String notificacion) {
-        System.out.println(notificacion);
+    public void recibirInformacionDeEstacionamiento(String informacion) {
+        System.out.println(informacion);
     }
 
 	@Override

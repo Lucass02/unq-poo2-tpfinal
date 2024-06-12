@@ -14,7 +14,7 @@ import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
 
 public class Sem implements INotificador {
     private List<ZonaDeEstacionamiento> zonas;
-    private List<Estacionamiento> estacionamientosActivos;
+    private List<Estacionamiento> estacionamientos;
     private List<Infraccion> infracciones;
     private List<AppUsuario> usuarios;
     private List<ISuscriptor> suscriptores;
@@ -22,7 +22,7 @@ public class Sem implements INotificador {
     
     public Sem() {
         this.zonas = new ArrayList<ZonaDeEstacionamiento>();
-        this.estacionamientosActivos = new ArrayList<Estacionamiento>();
+        this.estacionamientos = new ArrayList<Estacionamiento>();
         this.infracciones = new ArrayList<Infraccion>();
         this.usuarios = new ArrayList<AppUsuario>();
         this.suscriptores = new ArrayList<ISuscriptor>();
@@ -43,25 +43,47 @@ public class Sem implements INotificador {
     }
     
 	//Estacionamiento
-	public void iniciarEstacionamientoApp(ZonaDeEstacionamiento zona, String patente, String celular) {
-		ZonaDeEstacionamiento zonaActual = encontrarZona(zona);
-		if (zonaActual.estacionamientoVigente(patente) && esFranjaHoraria()) {
-			zonaActual.iniciarEstacionamientoApp(patente,celular);
-			notificar("Se inició estacionamiento para patente" + patente);
+    
+	public void iniciarEstacionamientoApp(String celular) {
+		//ZonaDeEstacionamiento zonaActual = encontrarZona(zona);
+		AppUsuario usuario = this.buscarUsuarioPorCelular(celular);
+		//Mas condiciones respecto al saldo 
+		//Devolverle la informacion del estacionamiento al usuario
+		if (estaLaZonaAEstacionarDentroDeLasZonasDelSem(usuario.getZona()) && !estacionamientoVigente(usuario.getPatente()) && esFranjaHoraria()) {
+			Estacionamiento nuevoEstacionamiento = new EstacionamientoPorApp(usuario.getPatente(), celular);
+			nuevoEstacionamiento.iniciarEstacionamiento();
+			estacionamientos.add(nuevoEstacionamiento);
+			notificar("Se inicio el estacionamiento para la patente: " + usuario.getPatente());
 		} else {
 			System.out.println("El usuario ya tiene un estacionamiento activo o el horario esta fuera de la franja horaria");
 		}
 	}
-	public void iniciarEstacionamientoCompraPuntual(ZonaDeEstacionamiento zona, String patente, int cantidadDeHsCompradas) {
-		ZonaDeEstacionamiento zonaActual = encontrarZona(zona);
-		if (zonaActual.estacionamientoVigente(patente) && esFranjaHoraria()) {
-			zonaActual.iniciarEstacionamientoCompraPuntual(patente,cantidadDeHsCompradas);
-			notificar("Se inició estacionamiento para patente" + patente);
+	
+	public void iniciarEstacionamientoCompraPuntual(ZonaDeEstacionamiento zona, String patente, int cantidadDeHsCompradas ) {
+		//ZonaDeEstacionamiento zonaActual = encontrarZona(zona);
+		if (estaLaZonaAEstacionarDentroDeLasZonasDelSem(zona) && !estacionamientoVigente(patente) && esFranjaHoraria()) {
+			Estacionamiento nuevoEstacionamiento = new EstacionamientoPorCompraPuntual (patente, cantidadDeHsCompradas);
+			nuevoEstacionamiento.iniciarEstacionamiento();
+			estacionamientos.add(nuevoEstacionamiento);
+			notificar("Se inicio el estacionamiento para la patente: " + patente);
 		} else {
 			System.out.println("El usuario ya tiene un estacionamiento activo o el horario esta fuera de la franja horaria");
 		}
 	}
-
+	
+	public void finalizarEstacionamientoPorApp(String celular) {
+		AppUsuario usuario = this.buscarUsuarioPorCelular(celular);
+		//Devolverle la informacion del estacionamiento al usuario 
+    	if (estacionamientoVigente(usuario.getPatente())) {
+    		Estacionamiento estacionamiento = estacionamientoDePatente(usuario.getPatente());
+    		estacionamiento.finalizarEstacionamiento();
+    		estacionamientos.remove(estacionamiento);
+    		notificar("Se finalizo el estacionamiento para la patente: " + usuario.getPatente());
+    	} else {
+            System.out.println("El usuario no tiene ningún estacionamiento activo");
+        }
+    }
+	
 	public void finalizarEstacionamiento(String patente) {
     	if (estacionamientoVigente(patente)) {
     		Estacionamiento estacionamiento = estacionamientoDePatente(patente);
@@ -72,18 +94,7 @@ public class Sem implements INotificador {
             System.out.println("El usuario no tiene ningún estacionamiento activo");
         }
     }
-	/*
-	public void finalizarEstacionamiento(String patente) {
-    	if (estacionamientoVigente(patente)) {
-    		Estacionamiento estacionamiento = estacionamientoDePatente(patente);
-    		estacionamiento.finalizarEstacionamiento();
-    		estacionamientos.remove(estacionamiento);
-    		notificar("Se finalizo el estacionamiento para la patente: " + patente);
-    	} else {
-            System.out.println("El usuario no tiene ningún estacionamiento activo");
-        }
-    }
-	*/
+	
     public void finalizarTodosLosEstacionamientos() {
         for (Estacionamiento e : estacionamientos) {
             if (e.estaVigente()) {
@@ -93,13 +104,19 @@ public class Sem implements INotificador {
         estacionamientos.clear();
     }
     
-    private ZonaDeEstacionamiento encontrarZona(ZonaDeEstacionamiento zona) {
+    // No se usa
+    /*private ZonaDeEstacionamiento encontrarZona(ZonaDeEstacionamiento zona) {
 		ZonaDeEstacionamiento zonaActual = (this.zonas.stream()
 							.filter(zonaDeEstacionamiento -> zonaDeEstacionamiento.getUbicacion().equals(zona.getUbicacion()))
 						    .findFirst()
 						    .orElseThrow(() -> new RuntimeException("No existe la zona dentro del sistema")));
 		return zonaActual;
-	}
+	}*/
+    
+    private boolean estaLaZonaAEstacionarDentroDeLasZonasDelSem(ZonaDeEstacionamiento zona) {
+        return this.zonas.stream()
+        				 .anyMatch(zonaDeEstacionamiento -> zonaDeEstacionamiento.getUbicacion().equals(zona.getUbicacion()));
+    }
     
     public boolean esFranjaHoraria() {
     	LocalDateTime ahora = LocalDateTime.now();
@@ -108,21 +125,38 @@ public class Sem implements INotificador {
     	return (ahora.isAfter(horaInicioDeFranjaHoraria) && ahora.isBefore(horaFinDeFranjaHoraria));
     }  
     
+    public boolean estacionamientoVigente(String patente) {
+    	return estacionamientos.stream().anyMatch(estacionamiento -> estacionamiento.getPatente().equals(patente));
+    }
+    
+    public Estacionamiento estacionamientoDePatente(String patente) {
+    	return estacionamientos.stream()
+    								  .filter(e -> e.getPatente().equals(patente))
+    								  .findFirst()
+    								  .orElseThrow(() -> new RuntimeException("No se encontró un Estacionamiento con el usuario dado."));
+    }
+    
+    
 	//Recarga Celular
 	
 	public void recargarSaldo(double monto, String patente) {
-		buscarUsuarioPorPatente(patente).ifPresent(u -> u.recargarSaldo(monto));
+		AppUsuario usuario = buscarUsuarioPorPatente(patente);
+		usuario.recargarSaldo(monto);
 		
-		String celular = buscarUsuarioPorPatente(patente)
-                			.map(AppUsuario::getCelular)
-                			.orElse("Número de celular no encontrado");
-		
+		String celular = usuario.getCelular();
 		notificar("Se recargo saldo para el celular: " + celular + "por un monto de: " + monto );
 	}
 	
-	public Optional<AppUsuario> buscarUsuarioPorPatente(String patente) {
+	public AppUsuario buscarUsuarioPorPatente(String patente) {
 		return usuarios.stream().filter(u -> u.getPatente().equals(patente))
-								.findFirst();
+								.findFirst()
+								.orElseThrow(() -> new RuntimeException("No se encontró un Usuario con el Celular dado"));
+	}
+	
+	public AppUsuario buscarUsuarioPorCelular(String celular) {
+		return usuarios.stream().filter(u -> u.getCelular().equals(celular))
+								.findFirst()
+								.orElseThrow(() -> new RuntimeException("No se encontró un Usuario con el Celular dado"));
 	}
 
 	//Infracciones 

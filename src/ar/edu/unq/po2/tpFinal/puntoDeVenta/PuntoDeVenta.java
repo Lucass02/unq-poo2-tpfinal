@@ -35,22 +35,9 @@ public class PuntoDeVenta {
     public ZonaDeEstacionamiento getZona() {
         return zona;
     }
-    
-    public void setId(int id) {
-		this.id = id;
-	}
-
-	public void setZona(ZonaDeEstacionamiento zona) {
-		this.zona = zona;
-	}
-	
 
     public Sem getSem() {
 		return sem;
-	}
-
-	public void setSem(Sem sem) {
-		this.sem = sem;
 	}
 
 	  public int getId() {

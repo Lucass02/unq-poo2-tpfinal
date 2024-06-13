@@ -12,18 +12,12 @@ public class Suscriptor implements ISuscriptor {
 
 	@Override
 	public void actualizar(String evento) {
-		System.out.println("El suscriptor " + this.nombre + "ha recibido el evento " + evento);
+		System.out.println("El suscriptor " + this.nombre + " ha recibido el evento " + evento);
 		
 	}
 	
 	public String getNombre() {
 		return nombre;
 	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-
 		
 }

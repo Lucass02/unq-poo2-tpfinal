@@ -1,6 +1,7 @@
 package ar.edu.unq.po2.tpFinal.puntoDeVenta;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 
 public class CompraPuntual extends Compra {
@@ -8,7 +9,7 @@ public class CompraPuntual extends Compra {
 
     //Constructor
     
-	public CompraPuntual(int numeroControl, PuntoDeVenta puntoDeVenta, LocalDate fecha, LocalDate hora,
+	public CompraPuntual(int numeroControl, PuntoDeVenta puntoDeVenta, LocalDate fecha, LocalTime hora,
 			int cantidadDeHsCompradas) {
 		super(numeroControl, puntoDeVenta, fecha, hora);
 		this.cantidadDeHsCompradas = cantidadDeHsCompradas;
@@ -28,11 +29,5 @@ public class CompraPuntual extends Compra {
 	public double getCantidadDeHsCompradas() {
 		return cantidadDeHsCompradas;
 	}
-
-	public void setCantidadDeHsCompradas(int cantidadDeHsCompradas) {
-		this.cantidadDeHsCompradas = cantidadDeHsCompradas;
-	}
-	
-	
 	
 }

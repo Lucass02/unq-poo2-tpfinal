@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ class RecargaCelularTest {
 	private PuntoDeVenta mockPuntoDeVenta;
 	private Sem mockSem;
 	private LocalDate fecha;
-    private LocalDate hora;
+    private LocalTime hora;
     private double monto;
     private String patente;
     private String patente2;
@@ -27,7 +28,7 @@ class RecargaCelularTest {
     @BeforeEach
     public void setUp() {
         fecha = LocalDate.now();
-        hora = LocalDate.now();
+        hora = LocalTime.now();
         monto = 100.0;
         patente = "AAA111";
         patente2 = "BBB222";

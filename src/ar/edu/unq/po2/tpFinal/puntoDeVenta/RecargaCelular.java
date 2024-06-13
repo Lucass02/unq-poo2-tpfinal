@@ -1,6 +1,7 @@
 package ar.edu.unq.po2.tpFinal.puntoDeVenta;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 
 
@@ -10,7 +11,7 @@ public class RecargaCelular extends Compra {
 	
 	//Constructor
 	
-	public RecargaCelular(int numeroControl, PuntoDeVenta puntoDeVenta, LocalDate fecha, LocalDate hora, double monto) {
+	public RecargaCelular(int numeroControl, PuntoDeVenta puntoDeVenta, LocalDate fecha, LocalTime hora, double monto) {
 		super(numeroControl, puntoDeVenta, fecha, hora);
 		this.monto = monto;
 	}
@@ -28,10 +29,6 @@ public class RecargaCelular extends Compra {
     
 	public double getMonto() {
 		return monto;
-	}
-
-	public void setMonto(double monto) {
-		this.monto = monto;
 	}
 
 }

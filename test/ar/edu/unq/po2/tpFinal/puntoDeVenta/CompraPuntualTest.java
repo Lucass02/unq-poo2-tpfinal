@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,15 +20,15 @@ class CompraPuntualTest {
 	private Sem mockSem;
 	
 	private LocalDate fecha;
-    private LocalDate hora;
-    private double cantidadDeHsCompradas;
+    private LocalTime hora;
+    private int cantidadDeHsCompradas;
     private String patente;
 	
     @BeforeEach
     public void setUp() {
         fecha = LocalDate.now();
-        hora = LocalDate.now();
-        cantidadDeHsCompradas = 4.0;
+        hora = LocalTime.now();
+        cantidadDeHsCompradas = 4;
         patente = "AAA111";
         mockPuntoDeVenta = mock(PuntoDeVenta.class);
         mockSem = mock(Sem.class);
@@ -40,7 +41,7 @@ class CompraPuntualTest {
 	
 	@Test
 	public void testConstructor() {
-		assertEquals(4.0, compraPuntual.getCantidadDeHsCompradas());
+		assertEquals(4, compraPuntual.getCantidadDeHsCompradas());
 	}
 	
 	@Test
@@ -48,7 +49,7 @@ class CompraPuntualTest {
 		compraPuntual.realizarCompra(patente);
 		 
 		verify(mockPuntoDeVenta).registrarCompra(compraPuntual);
-		verify(mockSem).asignarEstacionamiento(mockPuntoDeVenta.getZona(), patente, cantidadDeHsCompradas);
+		verify(mockSem).iniciarEstacionamientoCompraPuntual(mockPuntoDeVenta.getZona(), patente, cantidadDeHsCompradas);
 	}
 
 }

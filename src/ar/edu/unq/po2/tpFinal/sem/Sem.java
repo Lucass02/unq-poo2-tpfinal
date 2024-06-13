@@ -81,24 +81,17 @@ public class Sem implements INotificador {
         }
     }
 
-	private LocalDateTime obtenerFinMasTempranoEnDias(LocalDateTime finSegunSaldo) {
-		LocalDateTime finEnDias;
-        LocalDate hoy = reloj.obtenerFechaActual();
-		if (finSegunSaldo.isBefore(this.getHoraFinDeFranjaHoraria().atDate(hoy))) {
-		    finEnDias = finSegunSaldo;
-		} else {
-		    finEnDias = this.getHoraFinDeFranjaHoraria().atDate(hoy);
-		}
-		return finEnDias;
-	}
 		
 	public void iniciarEstacionamientoCompraPuntual(ZonaDeEstacionamiento zona, String patente, int cantidadDeHsCompradas ) {
 		//ZonaDeEstacionamiento zonaActual = encontrarZona(zona);
 		if (estaLaZonaAEstacionarDentroDeLasZonasDelSem(zona) && !estacionamientoVigente(patente) && esFranjaHoraria()) {
 			LocalTime inicio = reloj.obtenerHoraActual();
-			LocalTime finSegunCantidadHs = inicio.plusHours(cantidadDeHsCompradas);
+			LocalDateTime inicioEnDias = reloj.obtenerFechaYHoraActual();
+			LocalDateTime finSegunCantidadHs = inicioEnDias.plusHours(cantidadDeHsCompradas);
+			LocalDateTime finEnDias = obtenerFinMasTempranoEnDias(finSegunCantidadHs);
+			LocalTime fin = finEnDias.toLocalTime();
 			
-			Estacionamiento nuevoEstacionamiento = new EstacionamientoPorCompraPuntual (patente, inicio, finSegunCantidadHs, cantidadDeHsCompradas);
+			Estacionamiento nuevoEstacionamiento = new EstacionamientoPorCompraPuntual (patente, inicio, fin, cantidadDeHsCompradas);
 			estacionamientos.add(nuevoEstacionamiento);
 			notificar("Se inicio el estacionamiento para la patente: " + patente);
 		} else {
@@ -130,7 +123,7 @@ public class Sem implements INotificador {
     	Estacionamiento estacionamiento = estacionamientoDePatente(patente);
     	estacionamientos.remove(estacionamiento);
     	notificar("Se finalizo el estacionamiento para la patente: " + patente);
-    }
+    } 
 	
 	public void verificarSiCaducaronLosEstacionamientosYSiEsAsiFinalizarlos() {
 		LocalTime ahora = reloj.obtenerHoraActual();
@@ -149,14 +142,14 @@ public class Sem implements INotificador {
     	estacionamientos.forEach(e -> e.finalizarEstacionamiento(this));
     }
         
-    private boolean estaLaZonaAEstacionarDentroDeLasZonasDelSem(ZonaDeEstacionamiento zona) {
+    public boolean estaLaZonaAEstacionarDentroDeLasZonasDelSem(ZonaDeEstacionamiento zona) {
         return this.zonas.stream()
         				 .anyMatch(zonaDeEstacionamiento -> zonaDeEstacionamiento.getUbicacion().equals(zona.getUbicacion()));
     }
     
     public boolean esFranjaHoraria() {
     	LocalTime horaActual = reloj.obtenerHoraActual(); 
-    	return (horaActual.isAfter(horaInicioDeFranjaHoraria) && horaActual.isBefore(horaFinDeFranjaHoraria));
+    	return (horaActual.isAfter(this.getHoraInicioDeFranjaHoraria()) && horaActual.isBefore(this.getHoraFinDeFranjaHoraria()));
     }  
     
     public boolean estacionamientoVigente(String patente) {
@@ -169,7 +162,17 @@ public class Sem implements INotificador {
     								  .findFirst()
     								  .orElseThrow(() -> new RuntimeException("No se encontró un Estacionamiento con el usuario dado."));
     }
-    
+
+	private LocalDateTime obtenerFinMasTempranoEnDias(LocalDateTime finSegunSaldo) {
+		LocalDateTime finEnDias;
+        LocalDate hoy = reloj.obtenerFechaActual();
+		if (finSegunSaldo.isBefore(this.getHoraFinDeFranjaHoraria().atDate(hoy))) {
+		    finEnDias = finSegunSaldo;
+		} else {
+		    finEnDias = this.getHoraFinDeFranjaHoraria().atDate(hoy);
+		}
+		return finEnDias;
+	}
     
 	//Recarga Celular
 	
@@ -190,13 +193,13 @@ public class Sem implements INotificador {
 	}
 	
 	public AppUsuario buscarUsuarioPorPatente(String patente) {
-		return usuarios.stream().filter(u -> u.getPatente().equals(patente))
+		return getUsuarios().stream().filter(u -> u.getPatente().equals(patente))
 								.findFirst()
 								.orElseThrow(() -> new RuntimeException("No se encontró un Usuario con la patente dada"));
 	}
 	
 	public AppUsuario buscarUsuarioPorCelular(String celular) {
-		return usuarios.stream().filter(u -> u.getCelular().equals(celular))
+		return getUsuarios().stream().filter(u -> u.getCelular().equals(celular))
 								.findFirst()
 								.orElseThrow(() -> new RuntimeException("No se encontró un Usuario con el celular dado"));
 	}
@@ -238,20 +241,16 @@ public class Sem implements INotificador {
 		return horaInicioDeFranjaHoraria;
 	}
 
-	public void setHoraInicioDeFranjaHoraria(LocalTime horaInicioDeFranjaHoraria) {
-		this.horaInicioDeFranjaHoraria = horaInicioDeFranjaHoraria;
-	}
-
 	public LocalTime getHoraFinDeFranjaHoraria() {
 		return horaFinDeFranjaHoraria;
-	}
-
-	public void setHoraFinDeFranjaHoraria(LocalTime horaFinDeFranjaHoraria) {
-		this.horaFinDeFranjaHoraria = horaFinDeFranjaHoraria;
 	}
 
 	public List<Estacionamiento> getEstacionamientos() {
 		return estacionamientos;
 	}
-	
+
+	public List<ISuscriptor> getSuscriptores() {
+		return suscriptores;
+	}
+
 }

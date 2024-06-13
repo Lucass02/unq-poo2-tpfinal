@@ -1,9 +1,5 @@
 package ar.edu.unq.po2.tpFinal.appUsuario;
 
-import java.time.LocalDateTime;
-
-import ar.edu.unq.po2.tpFinal.sem.Sem;
-
 public class EstacionamientoIniciado implements EstadoEstacionamiento {
 
 	@Override

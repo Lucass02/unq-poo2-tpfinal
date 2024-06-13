@@ -8,19 +8,18 @@ public class AppUsuario implements MovementSensor{
     private String patente;
 	private double saldo;
     private ModoApp modo;
-    private Gps gps;
+    private ZonaDeEstacionamiento zona;
 	private EstadoEstacionamiento estado;
 	private Sem sem;
 
 	//Constructor
 	
-	  public AppUsuario(String celular, String patente, double saldo,
-				ModoApp modo, Gps gps, Sem sem) {
+	  public AppUsuario(String celular, String patente, ModoApp modo, ZonaDeEstacionamiento zona, Sem sem) {
 			this.celular = celular;
 			this.patente = patente;
 			this.saldo = 0;
 			this.modo = modo;
-			this.gps = gps;
+			this.zona = zona;
 			this.estado = new EstacionamientoSinIniciar();
 			this.sem = sem;
 		}
@@ -31,7 +30,11 @@ public class AppUsuario implements MovementSensor{
 	    this.saldo += monto;
 	} 
 	
-	public void iniciarEstacionamiento(Gps gps) {
+	public void descontarSaldo(double saldoADescontar) {
+		this.saldo -= saldoADescontar;
+	}
+	
+	public void iniciarEstacionamiento() {
 		this.sem.iniciarEstacionamientoApp(celular);
 	}
 	
@@ -55,11 +58,7 @@ public class AppUsuario implements MovementSensor{
 	}
 	
 	//Getters y Setters
-    
-    public ZonaDeEstacionamiento getZona() {
-    	return gps.getZona();  
-    }
-    
+        
     public void setModo(ModoApp modo) {
     	this.modo = modo;
     }
@@ -99,7 +98,8 @@ public class AppUsuario implements MovementSensor{
 	public EstadoEstacionamiento getEstado() {
 		return this.estado;
 	}
-	public Gps getGps() {
-		return this.gps;
+	
+	public ZonaDeEstacionamiento getZona() {
+		return this.zona;
 	}
 }

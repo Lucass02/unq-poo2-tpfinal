@@ -1,7 +1,5 @@
 package ar.edu.unq.po2.tpFinal.appUsuario;
 
-import ar.edu.unq.po2.tpFinal.sem.Sem;
-
 public class ModoAutomatico implements ModoApp{
 
 	@Override

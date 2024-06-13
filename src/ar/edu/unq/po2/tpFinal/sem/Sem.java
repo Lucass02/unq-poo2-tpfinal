@@ -40,15 +40,15 @@ public class Sem implements INotificador {
     //Observer para entidades
     
     public void suscribir(ISuscriptor suscriptor) {
-    	suscriptores.add(suscriptor);
+    	this.getSuscriptores().add(suscriptor);
     }
 
     public void desuscribir(ISuscriptor suscriptor) {
-    	suscriptores.remove(suscriptor);
+    	this.getSuscriptores().remove(suscriptor);
     }
     
     public void notificar(String evento) {
-    	suscriptores.stream().forEach(s -> s.actualizar(evento));
+    	this.getSuscriptores().stream().forEach(s -> s.actualizar(evento));
     }
     
 	//Estacionamiento
@@ -66,7 +66,7 @@ public class Sem implements INotificador {
                 LocalTime fin = finEnDias.toLocalTime();
 
                 Estacionamiento nuevoEstacionamiento = new EstacionamientoPorApp(usuario.getPatente(), inicio, fin, celular);
-                estacionamientos.add(nuevoEstacionamiento);
+                this.getEstacionamientos().add(nuevoEstacionamiento);
 
                 notificar("Se inicio el estacionamiento para la patente: " + usuario.getPatente());
                 usuario.recibirInformacionDeEstacionamiento("La hora de inicio del estacionamiento es: " + inicio + 
@@ -92,7 +92,7 @@ public class Sem implements INotificador {
 			LocalTime fin = finEnDias.toLocalTime();
 			
 			Estacionamiento nuevoEstacionamiento = new EstacionamientoPorCompraPuntual (patente, inicio, fin, cantidadDeHsCompradas);
-			estacionamientos.add(nuevoEstacionamiento);
+			this.getEstacionamientos().add(nuevoEstacionamiento);
 			notificar("Se inicio el estacionamiento para la patente: " + patente);
 		} else {
 			System.out.println("El usuario ya tiene un estacionamiento activo o el horario esta fuera de la franja horaria");
@@ -109,7 +109,7 @@ public class Sem implements INotificador {
     	usuario.descontarSaldo(saldoADescontar);
     	LocalTime horaFin = horaActual;
     	LocalTime horaInicio = estacionamiento.getInicio();    		
-    	estacionamientos.remove(estacionamiento);
+    	this.getEstacionamientos().remove(estacionamiento);
     	
     	
     	notificar("Se finalizo el estacionamiento para la patente: " + usuario.getPatente());
@@ -121,7 +121,7 @@ public class Sem implements INotificador {
 	
 	public void finalizarEstacionamiento(String patente) {
     	Estacionamiento estacionamiento = estacionamientoDePatente(patente);
-    	estacionamientos.remove(estacionamiento);
+    	this.getEstacionamientos().remove(estacionamiento);
     	notificar("Se finalizo el estacionamiento para la patente: " + patente);
     } 
 	
@@ -129,7 +129,7 @@ public class Sem implements INotificador {
 		LocalTime ahora = reloj.obtenerHoraActual();
 	    List<Estacionamiento> estacionamientosCaducados = new ArrayList<>();
 
-	    estacionamientos.forEach(e -> {
+	    this.getEstacionamientos().forEach(e -> {
 	        if (e.getFin().isBefore(ahora) || e.getFin().equals(ahora)) {
 	            estacionamientosCaducados.add(e);
 	        }
@@ -139,11 +139,11 @@ public class Sem implements INotificador {
 	}
 	
     public void finalizarTodosLosEstacionamientos() {
-    	estacionamientos.forEach(e -> e.finalizarEstacionamiento(this));
+    	this.getEstacionamientos().forEach(e -> e.finalizarEstacionamiento(this));
     }
         
     public boolean estaLaZonaAEstacionarDentroDeLasZonasDelSem(ZonaDeEstacionamiento zona) {
-        return this.zonas.stream()
+        return this.getZonas().stream()
         				 .anyMatch(zonaDeEstacionamiento -> zonaDeEstacionamiento.getUbicacion().equals(zona.getUbicacion()));
     }
     
@@ -153,11 +153,11 @@ public class Sem implements INotificador {
     }  
     
     public boolean estacionamientoVigente(String patente) {
-    	return estacionamientos.stream().anyMatch(estacionamiento -> estacionamiento.getPatente().equals(patente));
+    	return this.getEstacionamientos().stream().anyMatch(estacionamiento -> estacionamiento.getPatente().equals(patente));
     }
     
     public Estacionamiento estacionamientoDePatente(String patente) {
-    	return estacionamientos.stream()
+    	return this.getEstacionamientos().stream()
     								  .filter(e -> e.getPatente().equals(patente))
     								  .findFirst()
     								  .orElseThrow(() -> new RuntimeException("No se encontró un Estacionamiento con el usuario dado."));

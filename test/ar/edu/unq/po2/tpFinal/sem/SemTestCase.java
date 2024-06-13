@@ -159,6 +159,7 @@ public class SemTestCase {
         assertEquals(0, sem.getEstacionamientos().size());
     }
     
+    @Test
     public void testFinalizarTodosLosEstacionamientos() {
         sem.getEstacionamientos().add(estacionamientoMock);
         sem.finalizarTodosLosEstacionamientos();

@@ -24,23 +24,11 @@ public abstract class Estacionamiento {
 		return inicio;
 	}
 
-	public void setInicio(LocalTime inicio) {
-		this.inicio = inicio;
-	}
-
 	public LocalTime getFin() {
 		return fin;
-	}
-
-	public void setFin(LocalTime fin) {
-		this.fin = fin;
 	}
 	
 	public String getPatente() {
 		return patente;
-	}
-
-	public void setPatente(String patente) {
-		this.patente = patente;
 	}
 }

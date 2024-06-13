@@ -17,8 +17,8 @@ public class ZonaDeEstacionamiento {
     }
     
     public void agregarInspector(InspectorApp inspector) {
-    	inspector.agregarAZona(this);
     	this.inspector = inspector;
+    	inspector.agregarAZona(this);
     }
     
     public void agregarPuntoDeVenta(PuntoDeVenta puntoDeVenta) {

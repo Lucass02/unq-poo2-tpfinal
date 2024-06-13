@@ -20,16 +20,4 @@ public class EstacionamientoPorCompraPuntual extends Estacionamiento {
 	public void finalizarEstacionamiento(Sem sem) {
 		sem.finalizarEstacionamiento(this.getPatente());
 	}
-	
-	//Getters y Setters
-	
-	public double getCantidadDeHsCompradas() {
-		return cantidadDeHsCompradas;
-	}	
-
-	public void setCantidadDeHsCompradas(int cantidadDeHsCompradas) {
-		this.cantidadDeHsCompradas = cantidadDeHsCompradas;
-	}
-	
-	
 }

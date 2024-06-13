@@ -27,11 +27,4 @@ public class EstacionamientoPorApp extends Estacionamiento {
 	public String getCelular() {
 		return celular;
 	}
-
-	public void setCelular(String celular) {
-		this.celular = celular;
-	}
-
-	
-	
 }

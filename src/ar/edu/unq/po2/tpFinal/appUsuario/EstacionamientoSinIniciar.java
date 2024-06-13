@@ -4,6 +4,7 @@ public class EstacionamientoSinIniciar implements EstadoEstacionamiento {
 
 	@Override
 	public void iniciarEstacionamiento(AppUsuario usuario) {
+		usuario.setEstado(new EstacionamientoIniciado());
 		usuario.iniciarEstacionamiento();
 		usuario.recibirInformacionDeEstacionamiento("El inicio de estacionamiento se ha realizado de forma automática");
 	}

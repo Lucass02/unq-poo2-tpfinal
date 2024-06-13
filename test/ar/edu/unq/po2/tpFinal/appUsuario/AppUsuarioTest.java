@@ -25,7 +25,7 @@ public class AppUsuarioTest {
 	private Reloj reloj;
 	
     @BeforeEach
-    public void setUp() throws Exception{
+    public void setUp() throws Exception {
     	reloj = mock(Reloj.class);
         sem = new Sem(reloj);
         zona = mock(ZonaDeEstacionamiento.class);
@@ -43,7 +43,14 @@ public class AppUsuarioTest {
 	
 	@Test
 	public void testRecargarSaldoInvalido() throws Exception {
-		assertThrows(Exception.class, () -> sem.recargarSaldo(1500, "SDA346"));
+	    RuntimeException exception = assertThrows(RuntimeException.class, () -> sem.recargarSaldo(1500, "SDA346"));
+	    assertEquals("No se encontró un Usuario con la patente dada", exception.getMessage());
+	}
+	
+	@Test
+	public void testFinalizarEstacionamientoDeUsuarioInvalido() throws Exception {
+	    RuntimeException exception = assertThrows(RuntimeException.class, () -> usuario.finalizarEstacionamiento());
+	    assertEquals("No se encontró un Usuario con el celular dado", exception.getMessage());
 	}
 	
 	@Test
@@ -100,7 +107,7 @@ public class AppUsuarioTest {
         
         usuario.finalizarEstacionamiento();
         
-        assertTrue(sem.getEstacionamientos().size() == 0);
+        assertEquals(0, sem.getEstacionamientos().size());
         assertEquals(usuario.getSaldo(), 1380);
     }
 	
@@ -114,7 +121,70 @@ public class AppUsuarioTest {
         sem.agregarAppUsuario(usuario);
         sem.recargarSaldo(1500, "SDA346");
         
-        assertThrows(Exception.class, () -> usuario.finalizarEstacionamiento());
+        assertThrows(RuntimeException.class, () -> usuario.finalizarEstacionamiento());
     }
 	    
+    @Test
+    public void testWalkingModoAutomatico() {
+        when(reloj.obtenerHoraActual()).thenReturn(LocalTime.of(16, 0)); 
+        when(reloj.obtenerFechaActual()).thenReturn(LocalDate.of(2024, 6, 13)); 
+        when(reloj.obtenerFechaYHoraActual()).thenReturn(LocalDateTime.of(2024, 6, 13, 16, 0)); 
+    	
+        usuario.setModo(new ModoAutomatico());
+        
+        sem.agregarZona(zona);
+        sem.agregarAppUsuario(usuario);
+        sem.recargarSaldo(1500, "SDA346");
+        
+    	usuario.walking();
+        
+        assertTrue(sem.estacionamientoVigente("SDA346"));
+    }
+    
+    @Test
+    public void testDrivingModoAutomatico() {
+        when(reloj.obtenerHoraActual()).thenReturn(LocalTime.of(16, 0)); 
+        when(reloj.obtenerFechaActual()).thenReturn(LocalDate.of(2024, 6, 13)); 
+        when(reloj.obtenerFechaYHoraActual()).thenReturn(LocalDateTime.of(2024, 6, 13, 16, 0)); 
+    	
+        usuario.setModo(new ModoAutomatico());
+        
+        sem.agregarZona(zona);
+        sem.agregarAppUsuario(usuario);
+        sem.recargarSaldo(1500, "SDA346");
+        
+    	usuario.walking();
+    	
+        when(reloj.obtenerHoraActual()).thenReturn(LocalTime.of(18, 0)); 
+        when(reloj.obtenerFechaActual()).thenReturn(LocalDate.of(2024, 6, 13)); 
+        when(reloj.obtenerFechaYHoraActual()).thenReturn(LocalDateTime.of(2024, 6, 13, 18, 0)); 
+    	
+        usuario.driving();
+        
+        assertEquals(0, sem.getEstacionamientos().size());
+        assertEquals(usuario.getSaldo(), 1420);
+    }
+    
+    @Test
+    public void testDrivingYWalkingModoManual() {
+        when(reloj.obtenerHoraActual()).thenReturn(LocalTime.of(16, 0)); 
+        when(reloj.obtenerFechaActual()).thenReturn(LocalDate.of(2024, 6, 13)); 
+        when(reloj.obtenerFechaYHoraActual()).thenReturn(LocalDateTime.of(2024, 6, 13, 16, 0)); 
+    	  
+        sem.agregarZona(zona);
+        sem.agregarAppUsuario(usuario);
+        sem.recargarSaldo(1500, "SDA346");
+        
+    	usuario.walking();
+    	
+        when(reloj.obtenerHoraActual()).thenReturn(LocalTime.of(18, 0)); 
+        when(reloj.obtenerFechaActual()).thenReturn(LocalDate.of(2024, 6, 13)); 
+        when(reloj.obtenerFechaYHoraActual()).thenReturn(LocalDateTime.of(2024, 6, 13, 18, 0)); 
+    	
+        usuario.driving();
+        
+        assertEquals(0, sem.getEstacionamientos().size());
+        assertEquals(usuario.getSaldo(), 1500);
+    }
+    
 }

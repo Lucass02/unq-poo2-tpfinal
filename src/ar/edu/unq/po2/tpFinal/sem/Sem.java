@@ -192,13 +192,13 @@ public class Sem implements INotificador {
 	public AppUsuario buscarUsuarioPorPatente(String patente) {
 		return usuarios.stream().filter(u -> u.getPatente().equals(patente))
 								.findFirst()
-								.orElseThrow(() -> new RuntimeException("No se encontró un Usuario con el Celular dado"));
+								.orElseThrow(() -> new RuntimeException("No se encontró un Usuario con la patente dada"));
 	}
 	
 	public AppUsuario buscarUsuarioPorCelular(String celular) {
 		return usuarios.stream().filter(u -> u.getCelular().equals(celular))
 								.findFirst()
-								.orElseThrow(() -> new RuntimeException("No se encontró un Usuario con el Celular dado"));
+								.orElseThrow(() -> new RuntimeException("No se encontró un Usuario con el celular dado"));
 	}
 
 	//Infracciones 

@@ -9,6 +9,7 @@ public class EstacionamientoIniciado implements EstadoEstacionamiento {
 
 	@Override
 	public void finalizarEstacionamiento(AppUsuario usuario) {
+		usuario.setEstado(new EstacionamientoSinIniciar());
 		usuario.finalizarEstacionamiento();
 		usuario.recibirInformacionDeEstacionamiento("El fin de estacionamiento se ha realizado de forma automática");
 	}

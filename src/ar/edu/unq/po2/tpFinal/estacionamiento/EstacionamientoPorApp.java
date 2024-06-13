@@ -1,6 +1,8 @@
 package ar.edu.unq.po2.tpFinal.estacionamiento;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
+
+import ar.edu.unq.po2.tpFinal.sem.Sem;
 
 public class EstacionamientoPorApp extends Estacionamiento {
 
@@ -8,15 +10,17 @@ public class EstacionamientoPorApp extends Estacionamiento {
 
 	//Constructor
 	
-	public EstacionamientoPorApp(String patente, String celular) {
-		super(patente);
+	public EstacionamientoPorApp(String patente, LocalTime inicio, LocalTime fin, String celular) {
+		super(patente, inicio, fin);
 		this.celular = celular;
 	}
-	/*LA HORA FIN SE CALCULA POR EL CARGA HASTA EL MAXIMO DE LA FRANJA HORARIA O HASTA DONDE DE*/
 	
 	//Methods
 	
-	
+	@Override
+	public void finalizarEstacionamiento(Sem sem) {
+		sem.finalizarEstacionamientoPorApp(this.getCelular());
+	}
 	
 	//Getters y Setters
 	
@@ -27,7 +31,7 @@ public class EstacionamientoPorApp extends Estacionamiento {
 	public void setCelular(String celular) {
 		this.celular = celular;
 	}
-	
+
 	
 	
 }

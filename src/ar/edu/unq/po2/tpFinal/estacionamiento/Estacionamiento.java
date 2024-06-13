@@ -1,31 +1,38 @@
 package ar.edu.unq.po2.tpFinal.estacionamiento;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
+
+import ar.edu.unq.po2.tpFinal.sem.Sem;
 
 public abstract class Estacionamiento {
-    private LocalDateTime inicio;
-    private LocalDateTime fin;
+    private LocalTime inicio;
+    private LocalTime fin;
     private String patente;
+    
+    public Estacionamiento(String patente, LocalTime inicio, LocalTime fin) {
+		super();
+		this.inicio = inicio;
+		this.fin = fin;
+		this.patente = patente;
+	}
 
-    public Estacionamiento(String patente) {
-        this.patente = patente;
-        this.inicio = LocalDateTime.now();
-    }
-    /* Getters y Setters*/
+    public abstract void finalizarEstacionamiento(Sem sem);
+    
+	/* Getters y Setters*/
 
-	public LocalDateTime getInicio() {
+	public LocalTime getInicio() {
 		return inicio;
 	}
 
-	public void setInicio(LocalDateTime inicio) {
+	public void setInicio(LocalTime inicio) {
 		this.inicio = inicio;
 	}
 
-	public LocalDateTime getFin() {
+	public LocalTime getFin() {
 		return fin;
 	}
 
-	public void setFin(LocalDateTime fin) {
+	public void setFin(LocalTime fin) {
 		this.fin = fin;
 	}
 	

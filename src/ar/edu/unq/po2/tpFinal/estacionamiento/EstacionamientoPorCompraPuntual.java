@@ -1,26 +1,24 @@
 package ar.edu.unq.po2.tpFinal.estacionamiento;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
+
+import ar.edu.unq.po2.tpFinal.sem.Sem;
 
 public class EstacionamientoPorCompraPuntual extends Estacionamiento {
 	private int cantidadDeHsCompradas;
 
 	//Constructor
 	
-	public EstacionamientoPorCompraPuntual(String patente, int cantidadDeHsCompradas) {
-		super(patente);
+	public EstacionamientoPorCompraPuntual(String patente, LocalTime inicio, LocalTime fin, int cantidadDeHsCompradas) {
+		super(patente, inicio, fin);
 		this.cantidadDeHsCompradas = cantidadDeHsCompradas;
 	}
+	
 	//Methods
 	
 	@Override
-	public void iniciarEstacionamiento() {
-		super.iniciarEstacionamiento();
-		this.setFin(calcularFinEstacionamiento());
-	}
-	
-	public LocalDateTime calcularFinEstacionamiento() {
-		return this.getInicio().plusHours(this.cantidadDeHsCompradas);
+	public void finalizarEstacionamiento(Sem sem) {
+		sem.finalizarEstacionamiento(this.getPatente());
 	}
 	
 	//Getters y Setters

@@ -1,6 +1,8 @@
 package ar.edu.unq.po2.tpFinal.sem;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,9 @@ public class Sem implements INotificador {
     private List<Infraccion> infracciones;
     private List<AppUsuario> usuarios;
     private List<ISuscriptor> suscriptores;
+    private LocalTime horaInicioDeFranjaHoraria;
+    private LocalTime horaFinDeFranjaHoraria;
+    private double precioEstacionamientoPorHora;
     
     
     public Sem() {
@@ -25,6 +30,9 @@ public class Sem implements INotificador {
         this.infracciones = new ArrayList<Infraccion>();
         this.usuarios = new ArrayList<AppUsuario>();
         this.suscriptores = new ArrayList<ISuscriptor>();
+        this.horaInicioDeFranjaHoraria = LocalTime.of(7, 0);
+        this.horaFinDeFranjaHoraria = LocalTime.of(20, 0);
+        this.precioEstacionamientoPorHora = 40.0;
     }
     
     //Observer para entidades
@@ -46,21 +54,42 @@ public class Sem implements INotificador {
 	public void iniciarEstacionamientoApp(String celular) {
 		//ZonaDeEstacionamiento zonaActual = encontrarZona(zona);
 		AppUsuario usuario = this.buscarUsuarioPorCelular(celular);
-		//Mas condiciones respecto al saldo 
-		//Devolverle la informacion del estacionamiento al usuario
-		if (estaLaZonaAEstacionarDentroDeLasZonasDelSem(usuario.getZona()) && !estacionamientoVigente(usuario.getPatente()) && esFranjaHoraria()) {
-			Estacionamiento nuevoEstacionamiento = new EstacionamientoPorApp(usuario.getPatente(), celular);
-			estacionamientos.add(nuevoEstacionamiento);
-			notificar("Se inicio el estacionamiento para la patente: " + usuario.getPatente());
+		if (usuario.getSaldo() > 0) {
+			if (estaLaZonaAEstacionarDentroDeLasZonasDelSem(usuario.getZona()) && !estacionamientoVigente(usuario.getPatente()) && esFranjaHoraria()) {
+				double horasMaximasSegunSaldo = (usuario.getSaldo() / this.getPrecioEstacionamientoPorHora());
+				LocalTime inicio = LocalTime.now();
+				LocalTime finSegunSaldo = inicio.plusHours((long)(horasMaximasSegunSaldo));
+				LocalTime fin;
+				if (finSegunSaldo.isBefore(this.getHoraFinDeFranjaHoraria())) {
+				    fin = finSegunSaldo;
+				} else {
+				    fin = this.getHoraFinDeFranjaHoraria();
+				}
+				
+				Estacionamiento nuevoEstacionamiento = new EstacionamientoPorApp(usuario.getPatente(), inicio, fin, celular);
+				estacionamientos.add(nuevoEstacionamiento);
+				
+				notificar("Se inicio el estacionamiento para la patente: " + usuario.getPatente());
+				usuario.recibirInformacionDeEstacionamiento("La hora de inicio del estacionamiento es:" + inicio + 
+															", su saldo alcanza para tener activo el estacionamiento hasta las: " + fin);
+			} else {
+				usuario.recibirInformacionDeEstacionamiento("El usuario ya tiene un estacionamiento activo "
+															+ "o el horario esta fuera de la franja horaria "
+															+ "o la zona no se encuentra dentro del sem");
+			}
 		} else {
-			System.out.println("El usuario ya tiene un estacionamiento activo o el horario esta fuera de la franja horaria");
+			usuario.recibirInformacionDeEstacionamiento("Saldo insuficiente. Estacionamiento no permitido.");
 		}
 	}
 	
+
 	public void iniciarEstacionamientoCompraPuntual(ZonaDeEstacionamiento zona, String patente, int cantidadDeHsCompradas ) {
 		//ZonaDeEstacionamiento zonaActual = encontrarZona(zona);
 		if (estaLaZonaAEstacionarDentroDeLasZonasDelSem(zona) && !estacionamientoVigente(patente) && esFranjaHoraria()) {
-			Estacionamiento nuevoEstacionamiento = new EstacionamientoPorCompraPuntual (patente, cantidadDeHsCompradas);
+			LocalTime inicio = LocalTime.now();
+			LocalTime finSegunCantidadHs = inicio.plusHours(cantidadDeHsCompradas);
+			
+			Estacionamiento nuevoEstacionamiento = new EstacionamientoPorCompraPuntual (patente, inicio, finSegunCantidadHs, cantidadDeHsCompradas);
 			estacionamientos.add(nuevoEstacionamiento);
 			notificar("Se inicio el estacionamiento para la patente: " + patente);
 		} else {
@@ -70,33 +99,45 @@ public class Sem implements INotificador {
 	
 	public void finalizarEstacionamientoPorApp(String celular) {
 		AppUsuario usuario = this.buscarUsuarioPorCelular(celular);
-		//Devolverle la informacion del estacionamiento al usuario 
-    	if (estacionamientoVigente(usuario.getPatente())) {
-    		Estacionamiento estacionamiento = estacionamientoDePatente(usuario.getPatente());
-    		estacionamientos.remove(estacionamiento);
-    		notificar("Se finalizo el estacionamiento para la patente: " + usuario.getPatente());
-    	} else {
-            System.out.println("El usuario no tiene ningún estacionamiento activo");
-        }
-    }
+    	Estacionamiento estacionamiento = estacionamientoDePatente(usuario.getPatente());
+    	
+    	LocalTime horaActual = LocalTime.now();
+    	int duracionDelEstacionamiento = Duration.between(horaActual, estacionamiento.getInicio()).toHoursPart();
+    	double saldoADescontar = duracionDelEstacionamiento * this.getPrecioEstacionamientoPorHora();
+    	usuario.descontarSaldo(saldoADescontar);
+    	LocalTime horaFin = horaActual;
+    	LocalTime horaInicio = estacionamiento.getInicio();    		
+    	estacionamientos.remove(estacionamiento);
+    	
+    	
+    	notificar("Se finalizo el estacionamiento para la patente: " + usuario.getPatente());
+    	usuario.recibirInformacionDeEstacionamiento("La hora de inicio del estacionamiento fue:" + horaInicio + 
+													", la hora de fin del estacionamiento fue: " + horaFin +
+													", la duracion en horas del estacionamiento fue: " + duracionDelEstacionamiento +
+													", el costo descontado del estacionamiento fue de: " + saldoADescontar);
+    	}
 	
 	public void finalizarEstacionamiento(String patente) {
-    	if (estacionamientoVigente(patente)) {
-    		Estacionamiento estacionamiento = estacionamientoDePatente(patente);
-    		estacionamientos.remove(estacionamiento);
-    		notificar("Se finalizo el estacionamiento para la patente: " + patente);
-    	} else {
-            System.out.println("El usuario no tiene ningún estacionamiento activo");
-        }
+    	Estacionamiento estacionamiento = estacionamientoDePatente(patente);
+    	estacionamientos.remove(estacionamiento);
+    	notificar("Se finalizo el estacionamiento para la patente: " + patente);
     }
 	
+	public void verificarSiCaducaronLosEstacionamientosYSiEsAsiFinalizarlos() {
+		LocalTime ahora = LocalTime.now();
+	    List<Estacionamiento> estacionamientosCaducados = new ArrayList<>();
+
+	    estacionamientos.forEach(e -> {
+	        if (e.getFin().isBefore(ahora) || e.getFin().equals(ahora)) {
+	            estacionamientosCaducados.add(e);
+	        }
+	    });
+
+	    estacionamientosCaducados.forEach(e -> finalizarEstacionamiento(e.getPatente()));
+	}
+	
     public void finalizarTodosLosEstacionamientos() {
-        for (Estacionamiento e : estacionamientos) {
-            if (e.estaVigente()) {
-                e.finalizarEstacionamiento();
-            }
-        }
-        estacionamientos.clear();
+    	estacionamientos.forEach(e -> e.finalizarEstacionamiento(this));
     }
     
     // No se usa
@@ -114,9 +155,7 @@ public class Sem implements INotificador {
     }
     
     public boolean esFranjaHoraria() {
-    	LocalDateTime ahora = LocalDateTime.now();
-    	LocalDateTime horaInicioDeFranjaHoraria = LocalDateTime.of(ahora.getYear(), ahora.getMonth(), ahora.getDayOfMonth(), 7, 0);
-    	LocalDateTime horaFinDeFranjaHoraria = LocalDateTime.of(ahora.getYear(), ahora.getMonth(), ahora.getDayOfMonth(), 20, 0);
+    	LocalTime ahora = LocalTime.now();
     	return (ahora.isAfter(horaInicioDeFranjaHoraria) && ahora.isBefore(horaFinDeFranjaHoraria));
     }  
     
@@ -162,11 +201,16 @@ public class Sem implements INotificador {
 	
 	//Getters y Setters
     
+    
     public void agregarZona(ZonaDeEstacionamiento zona) {
         zonas.add(zona);
     }
     
-    public void agregarAppUsuario(AppUsuario usuario) {
+    public double getPrecioEstacionamientoPorHora() {
+		return precioEstacionamientoPorHora;
+	}
+
+	public void agregarAppUsuario(AppUsuario usuario) {
         usuarios.add(usuario);
     }
     
@@ -180,6 +224,22 @@ public class Sem implements INotificador {
 
 	public List<Infraccion> getInfracciones() {
 		return infracciones;
+	}
+
+	public LocalTime getHoraInicioDeFranjaHoraria() {
+		return horaInicioDeFranjaHoraria;
+	}
+
+	public void setHoraInicioDeFranjaHoraria(LocalTime horaInicioDeFranjaHoraria) {
+		this.horaInicioDeFranjaHoraria = horaInicioDeFranjaHoraria;
+	}
+
+	public LocalTime getHoraFinDeFranjaHoraria() {
+		return horaFinDeFranjaHoraria;
+	}
+
+	public void setHoraFinDeFranjaHoraria(LocalTime horaFinDeFranjaHoraria) {
+		this.horaFinDeFranjaHoraria = horaFinDeFranjaHoraria;
 	}
 	
 }

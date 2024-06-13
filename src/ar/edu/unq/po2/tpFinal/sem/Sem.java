@@ -62,12 +62,7 @@ public class Sem implements INotificador {
                 LocalDateTime inicioEnDias = reloj.obtenerFechaYHoraActual();
                 LocalDateTime finSegunSaldo = inicioEnDias.plusHours((long)(horasMaximasSegunSaldo));
                 LocalDateTime finEnDias;
-                LocalDate hoy = reloj.obtenerFechaActual();
-                if (finSegunSaldo.isBefore(this.getHoraFinDeFranjaHoraria().atDate(hoy))) {
-                    finEnDias = finSegunSaldo;
-                } else {
-                    finEnDias = this.getHoraFinDeFranjaHoraria().atDate(hoy);
-                }
+                finEnDias = obtenerFinMasTempranoEnDias(finSegunSaldo);
                 LocalTime fin = finEnDias.toLocalTime();
 
                 Estacionamiento nuevoEstacionamiento = new EstacionamientoPorApp(usuario.getPatente(), inicio, fin, celular);
@@ -85,6 +80,17 @@ public class Sem implements INotificador {
             usuario.recibirInformacionDeEstacionamiento("Saldo insuficiente. Estacionamiento no permitido.");
         }
     }
+
+	private LocalDateTime obtenerFinMasTempranoEnDias(LocalDateTime finSegunSaldo) {
+		LocalDateTime finEnDias;
+        LocalDate hoy = reloj.obtenerFechaActual();
+		if (finSegunSaldo.isBefore(this.getHoraFinDeFranjaHoraria().atDate(hoy))) {
+		    finEnDias = finSegunSaldo;
+		} else {
+		    finEnDias = this.getHoraFinDeFranjaHoraria().atDate(hoy);
+		}
+		return finEnDias;
+	}
 		
 	public void iniciarEstacionamientoCompraPuntual(ZonaDeEstacionamiento zona, String patente, int cantidadDeHsCompradas ) {
 		//ZonaDeEstacionamiento zonaActual = encontrarZona(zona);

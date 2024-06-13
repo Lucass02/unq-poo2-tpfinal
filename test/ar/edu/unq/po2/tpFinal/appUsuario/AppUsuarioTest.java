@@ -186,5 +186,48 @@ public class AppUsuarioTest {
         assertEquals(0, sem.getEstacionamientos().size());
         assertEquals(usuario.getSaldo(), 1500);
     }
-    
+    @Test
+    public void testWalkingConEstacionamientoIniciadoModoAutomatico() {
+        when(reloj.obtenerHoraActual()).thenReturn(LocalTime.of(16, 0)); 
+        when(reloj.obtenerFechaActual()).thenReturn(LocalDate.of(2024, 6, 13)); 
+        when(reloj.obtenerFechaYHoraActual()).thenReturn(LocalDateTime.of(2024, 6, 13, 16, 0)); 
+    	
+        usuario.setModo(new ModoAutomatico());
+        
+        sem.agregarZona(zona);
+        sem.agregarAppUsuario(usuario);
+        sem.recargarSaldo(1500, "SDA346");
+        
+    	usuario.walking();
+    	
+        when(reloj.obtenerHoraActual()).thenReturn(LocalTime.of(18, 0)); 
+        when(reloj.obtenerFechaActual()).thenReturn(LocalDate.of(2024, 6, 13)); 
+        when(reloj.obtenerFechaYHoraActual()).thenReturn(LocalDateTime.of(2024, 6, 13, 18, 0)); 
+    	
+        usuario.walking();
+        
+        assertEquals(1, sem.getEstacionamientos().size());
+    }
+    @Test
+    public void testDrivingConEstacionamientoIniciadoModoAutomatico() {
+        when(reloj.obtenerHoraActual()).thenReturn(LocalTime.of(16, 0)); 
+        when(reloj.obtenerFechaActual()).thenReturn(LocalDate.of(2024, 6, 13)); 
+        when(reloj.obtenerFechaYHoraActual()).thenReturn(LocalDateTime.of(2024, 6, 13, 16, 0)); 
+    	
+        usuario.setModo(new ModoAutomatico());
+        
+        sem.agregarZona(zona);
+        sem.agregarAppUsuario(usuario);
+        sem.recargarSaldo(1500, "SDA346");
+        
+    	usuario.driving();
+    	
+        when(reloj.obtenerHoraActual()).thenReturn(LocalTime.of(18, 0)); 
+        when(reloj.obtenerFechaActual()).thenReturn(LocalDate.of(2024, 6, 13)); 
+        when(reloj.obtenerFechaYHoraActual()).thenReturn(LocalDateTime.of(2024, 6, 13, 18, 0)); 
+    	
+        usuario.driving();
+        
+        assertEquals(0, sem.getEstacionamientos().size());
+    }
 }

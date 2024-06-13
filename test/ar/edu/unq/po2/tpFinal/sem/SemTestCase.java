@@ -14,9 +14,11 @@ import java.time.LocalTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import ar.edu.unq.po2.tpFinal.appUsuario.AppUsuario;
 import ar.edu.unq.po2.tpFinal.estacionamiento.Estacionamiento;
+import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.Infraccion;
 import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
 
 
@@ -27,6 +29,7 @@ public class SemTestCase {
 	private ZonaDeEstacionamiento zonaMock;
 	private ZonaDeEstacionamiento zonaMock2;
 	private Estacionamiento estacionamientoMock;
+	private Infraccion infraccion;
 	
 	
     @BeforeEach
@@ -164,7 +167,7 @@ public class SemTestCase {
         sem.getEstacionamientos().add(estacionamientoMock);
         sem.finalizarTodosLosEstacionamientos();
         
-        assertEquals(0, sem.getEstacionamientos().size());
+        verify(estacionamientoMock).finalizarEstacionamiento(sem);
     }
     
     @Test
@@ -180,6 +183,11 @@ public class SemTestCase {
         
         verify(usuarioMock, times(1)).descontarSaldo(20.0);
     }
-    
+    @Test
+    public void testRegistrarInfraccion() {
+        sem.registrarInfraccion(infraccion);
+        
+        assertEquals(sem.getInfracciones().size(),1);
+    }
 }
 

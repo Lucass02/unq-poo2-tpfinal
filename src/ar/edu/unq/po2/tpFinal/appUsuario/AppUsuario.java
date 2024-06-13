@@ -39,7 +39,7 @@ public class AppUsuario implements MovementSensor{
 	}
 	
 	public void finalizarEstacionamiento() {
-		this.sem.finalizarEstacionamiento(celular);
+		this.sem.finalizarEstacionamientoPorApp(celular);
 	}
     
     public void recibirInformacionDeEstacionamiento(String informacion) {

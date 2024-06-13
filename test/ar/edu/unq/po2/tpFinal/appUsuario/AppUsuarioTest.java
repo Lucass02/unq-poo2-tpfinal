@@ -7,10 +7,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
+import ar.edu.unq.po2.tpFinal.sem.Reloj;
 import ar.edu.unq.po2.tpFinal.sem.Sem;
 import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
 
@@ -30,7 +34,7 @@ public class AppUsuarioTest {
     }
         
 	@Test
-	public void testRecargarSaldo() {
+	public void testRecargarSaldoValido() {
         sem.agregarAppUsuario(usuario);
 		sem.recargarSaldo(1500, "SDA346");
 		
@@ -45,17 +49,19 @@ public class AppUsuarioTest {
 	@Test
 	public void testDescontarSaldo() {
         sem.agregarAppUsuario(usuario);
-		sem.recargarSaldo(1500, "SDA346");
-		//sem.descontarSaldo(400, "SDA346"); 
-		usuario.descontarSaldo(400);
+		sem.recargarSaldo(1500, "SDA346"); 
+		sem.descontarSaldo(400, "SDA346"); 
 		
 		assertEquals(usuario.getSaldo(), 1100);
 	}
 	
     @Test
     public void testIniciarEstacionamientoValido() {
-        when(reloj.obtenerFechaYHoraActual()).thenReturn(LocalDateTime.of(2024, 6, 12, 4, 0)); 
+        when(reloj.obtenerHoraActual()).thenReturn(LocalTime.of(16, 0)); 
+        when(reloj.obtenerFechaActual()).thenReturn(LocalDate.of(2024, 6, 13)); 
+        when(reloj.obtenerFechaYHoraActual()).thenReturn(LocalDateTime.of(2024, 6, 13, 16, 0)); 
         
+        sem.agregarZona(zona);
         sem.agregarAppUsuario(usuario);
         sem.recargarSaldo(1500, "SDA346");
         usuario.iniciarEstacionamiento();
@@ -65,13 +71,50 @@ public class AppUsuarioTest {
 	
     @Test
     public void testIniciarEstacionamientoInvalido() {
-        when(reloj.obtenerFechaYHoraActual()).thenReturn(LocalDateTime.of(2024, 6, 12, 11, 0)); 
+        when(reloj.obtenerHoraActual()).thenReturn(LocalTime.of(23, 0)); 
+        when(reloj.obtenerFechaActual()).thenReturn(LocalDate.of(2024, 6, 13)); 
+        when(reloj.obtenerFechaYHoraActual()).thenReturn(LocalDateTime.of(2024, 6, 13, 23, 0)); 
         
+        sem.agregarZona(zona);
         sem.agregarAppUsuario(usuario);
         sem.recargarSaldo(1500, "SDA346");
         usuario.iniciarEstacionamiento();
         
         assertFalse(sem.estacionamientoVigente("SDA346"));
     }
+    
+    @Test
+    public void testFinalizarEstacionamientoValido() {
+        when(reloj.obtenerHoraActual()).thenReturn(LocalTime.of(16, 0)); 
+        when(reloj.obtenerFechaActual()).thenReturn(LocalDate.of(2024, 6, 13)); 
+        when(reloj.obtenerFechaYHoraActual()).thenReturn(LocalDateTime.of(2024, 6, 13, 16, 0)); 
+        
+        sem.agregarZona(zona);
+        sem.agregarAppUsuario(usuario);
+        sem.recargarSaldo(1500, "SDA346");
+        usuario.iniciarEstacionamiento();
+        
+        when(reloj.obtenerHoraActual()).thenReturn(LocalTime.of(19, 0)); 
+        when(reloj.obtenerFechaActual()).thenReturn(LocalDate.of(2024, 6, 13)); 
+        when(reloj.obtenerFechaYHoraActual()).thenReturn(LocalDateTime.of(2024, 6, 13, 19, 0)); 
+        
+        usuario.finalizarEstacionamiento();
+        
+        assertTrue(sem.getEstacionamientos().size() == 0);
+        assertEquals(usuario.getSaldo(), 1380);
+    }
 	
+    @Test
+    public void testFinalizarEstacionamientoInvalido() throws Exception {
+        when(reloj.obtenerHoraActual()).thenReturn(LocalTime.of(16, 0)); 
+        when(reloj.obtenerFechaActual()).thenReturn(LocalDate.of(2024, 6, 13)); 
+        when(reloj.obtenerFechaYHoraActual()).thenReturn(LocalDateTime.of(2024, 6, 13, 16, 0)); 
+        
+        sem.agregarZona(zona);
+        sem.agregarAppUsuario(usuario);
+        sem.recargarSaldo(1500, "SDA346");
+        
+        assertThrows(Exception.class, () -> usuario.finalizarEstacionamiento());
+    }
+	    
 }

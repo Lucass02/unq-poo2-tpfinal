@@ -11,18 +11,12 @@ public class RecargaCelular extends Compra {
 	
 	//Constructor
 	
-	public RecargaCelular(int numeroControl, PuntoDeVenta puntoDeVenta, LocalDate fecha, LocalTime hora, double monto) {
-		super(numeroControl, puntoDeVenta, fecha, hora);
+	public RecargaCelular(PuntoDeVenta puntoDeVenta, LocalDate fecha, LocalTime hora, double monto) {
+		super(puntoDeVenta, fecha, hora);
 		this.monto = monto;
 	}
 
-    //Methods
     
-	@Override
-	public void realizarCompra(String patente) {
-		this.getPuntoDeVenta().registrarCompra(this);
-		this.getPuntoDeVenta().getSem().recargarSaldo(monto, patente);;
-	}
 
 	
 	//Getters y Setters

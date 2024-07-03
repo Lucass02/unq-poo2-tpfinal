@@ -12,17 +12,12 @@ public abstract class Compra {
 	
 	//Constructor
 	
-	public Compra(int numeroControl, PuntoDeVenta puntoDeVenta, LocalDate fecha, LocalTime hora) {
-		this.numeroControl = numeroControl;
+	public Compra(PuntoDeVenta puntoDeVenta, LocalDate fecha, LocalTime hora) {
+		this.numeroControl += 1;
 		this.puntoDeVenta = puntoDeVenta;
 		this.fecha = fecha;
 		this.hora = hora;
 	}
-	
-	//Methods
-	
-	//Al hacer una compra con la patente no hace falta que el usuario posea la app, en caso de ser una recarga, se busca al celular mediante la patente.
-	public abstract void realizarCompra(String patente);
 	
 	//Getters y Setters
 	

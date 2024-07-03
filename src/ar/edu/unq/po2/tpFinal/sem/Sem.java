@@ -176,19 +176,17 @@ public class Sem implements INotificador {
     
 	//Recarga Celular
 	
-	public void recargarSaldo(double monto, String patente) {
-		AppUsuario usuario = buscarUsuarioPorPatente(patente);
+	public void recargarSaldo(String celular, double monto) {
+		AppUsuario usuario = buscarUsuarioPorCelular(celular);
 		usuario.recargarSaldo(monto);
 		
-		String celular = usuario.getCelular();
 		notificar("Se recargo saldo para el celular: " + celular + "por un monto de: " + monto );
 	}
 	
-	public void descontarSaldo(double monto, String patente) {
-		AppUsuario usuario = buscarUsuarioPorPatente(patente);
+	public void descontarSaldo(String celular, double monto) {
+		AppUsuario usuario = buscarUsuarioPorCelular(celular);
 		usuario.descontarSaldo(monto);
 		
-		String celular = usuario.getCelular();
 		notificar("Se desconto saldo para el celular: " + celular + "por un monto de: " + monto );
 	}
 	

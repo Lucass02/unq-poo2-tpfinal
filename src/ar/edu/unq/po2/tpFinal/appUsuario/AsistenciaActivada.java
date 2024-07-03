@@ -4,12 +4,12 @@ public class AsistenciaActivada implements Asistencia {
 
 	@Override
 	public void driving(AppUsuario usuario) {
-		usuario.recibirInformacionDeEstacionamiento("¡Alerta! Cambio de desplazamiento de pie a automovil");
+		usuario.recibirInformacionDeEstacionamiento("Forma de desplazamiento: A pie");
 	}
 
 	@Override
 	public void walking(AppUsuario usuario) {
-		usuario.recibirInformacionDeEstacionamiento("¡Alerta! Cambio de desplazamiento de automovil a pie");
+		usuario.recibirInformacionDeEstacionamiento("Forma de desplazamiento: Automovil");
 	}
 
 }

@@ -10,7 +10,16 @@ public class EstacionamientoIniciado implements EstadoEstacionamiento {
 	@Override
 	public void finalizarEstacionamiento(AppUsuario usuario) {
 		usuario.setEstado(new EstacionamientoSinIniciar());
-		usuario.finalizarEstacionamiento();
-		usuario.recibirInformacionDeEstacionamiento("El fin de estacionamiento se ha realizado de forma automática");
+		usuario.getSem().finalizarEstacionamientoPorApp(usuario.getCelular());
+		usuario.recibirInformacionDeEstacionamiento("El fin de estacionamiento se ha realizado de forma " + usuario.getModo().nombre());
+	}
+
+	@Override
+	public void notificarDriving(AppUsuario usuario) {
+		usuario.getAsistencia().driving(usuario);
+	}
+
+	@Override
+	public void notificarWalking(AppUsuario usuario) {		
 	}
 }

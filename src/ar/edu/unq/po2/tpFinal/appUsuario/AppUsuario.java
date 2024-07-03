@@ -11,10 +11,11 @@ public class AppUsuario implements MovementSensor{
     private ZonaDeEstacionamiento zona;
 	private EstadoEstacionamiento estado;
 	private Sem sem;
+	private Asistencia asistencia;
 
 	//Constructor
 	
-	public AppUsuario(String celular, String patente, ModoApp modo, ZonaDeEstacionamiento zona, Sem sem) {
+	public AppUsuario(String celular, String patente, ModoApp modo, ZonaDeEstacionamiento zona, Sem sem, Asistencia asistencia) {
 		this.celular = celular;
 		this.patente = patente;
 		this.saldo = 0;
@@ -22,6 +23,7 @@ public class AppUsuario implements MovementSensor{
 		this.zona = zona;
 		this.estado = new EstacionamientoSinIniciar();
 		this.sem = sem;
+		this.asistencia = asistencia;
 	}
 	
 	//Methods
@@ -35,11 +37,11 @@ public class AppUsuario implements MovementSensor{
 	}
 	
 	public void iniciarEstacionamiento() {
-		this.sem.iniciarEstacionamientoApp(celular);
+		this.estado.iniciarEstacionamiento(this);
 	}
 	
 	public void finalizarEstacionamiento() {
-		this.sem.finalizarEstacionamientoPorApp(celular);
+		this.estado.finalizarEstacionamiento(this);
 	}
     
     public void recibirInformacionDeEstacionamiento(String informacion) {
@@ -59,10 +61,15 @@ public class AppUsuario implements MovementSensor{
 	
 	//Getters y Setters
         
-    public void setModo(ModoApp modo) {
-    	this.modo = modo;
+    public void activarModoAutomatico() {
+    	this.modo = new ModoAutomatico();
+    	this.asistencia = new AsistenciaActivada();
     }
-	
+    
+    public void activarModoManual() {
+    	this.modo = new ModoManual();
+    }
+    
 	public void setEstado(EstadoEstacionamiento estadoActual) {
 		this.estado = estadoActual;
 	}
@@ -77,6 +84,26 @@ public class AppUsuario implements MovementSensor{
 
 	public double getSaldo() {
 		return saldo;
+	}
+	
+	public Sem getSem() {
+		return sem;
+	}
+
+	public ModoApp getModo() {
+		return modo;
+	}
+
+	public Asistencia getAsistencia() {
+		return asistencia;
+	}
+	
+	public void asistenciaActivada() {
+		this.asistencia = new AsistenciaActivada();
+	}
+	
+	public void asistenciaDesactivada() {
+		this.asistencia = new AsistenciaDesactivada();
 	}
 	
 	public EstadoEstacionamiento getEstado() {

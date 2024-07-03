@@ -4,4 +4,6 @@ public interface EstadoEstacionamiento {
 	
 	public void iniciarEstacionamiento(AppUsuario usuario);
 	public void finalizarEstacionamiento(AppUsuario usuario);
+	public void notificarDriving(AppUsuario usuario);
+	public void notificarWalking(AppUsuario usuario);
 }

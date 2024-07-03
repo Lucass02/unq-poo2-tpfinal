@@ -5,13 +5,22 @@ public class EstacionamientoSinIniciar implements EstadoEstacionamiento {
 	@Override
 	public void iniciarEstacionamiento(AppUsuario usuario) {
 		usuario.setEstado(new EstacionamientoIniciado());
-		usuario.iniciarEstacionamiento();
-		usuario.recibirInformacionDeEstacionamiento("El inicio de estacionamiento se ha realizado de forma automática");
+		usuario.getSem().iniciarEstacionamientoApp(usuario.getCelular());
+		usuario.recibirInformacionDeEstacionamiento("El inicio de estacionamiento se ha realizado de forma " + usuario.getModo().nombre());
 	}
 
 	@Override
 	public void finalizarEstacionamiento(AppUsuario usuario) {
 		/*No hace nada*/
+	}
+
+	@Override
+	public void notificarDriving(AppUsuario usuario) {
+	}
+
+	@Override
+	public void notificarWalking(AppUsuario usuario) {
+		usuario.getAsistencia().walking(usuario);
 	}
 	
 }

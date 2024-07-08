@@ -11,6 +11,7 @@ import ar.edu.unq.po2.tpFinal.appUsuario.AppUsuario;
 import ar.edu.unq.po2.tpFinal.estacionamiento.Estacionamiento;
 import ar.edu.unq.po2.tpFinal.estacionamiento.EstacionamientoPorApp;
 import ar.edu.unq.po2.tpFinal.estacionamiento.EstacionamientoPorCompraPuntual;
+import ar.edu.unq.po2.tpFinal.puntoDeVenta.Compra;
 import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.Infraccion;
 import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
 
@@ -47,8 +48,16 @@ public class Sem implements INotificador {
     	this.getSuscriptores().remove(suscriptor);
     }
     
-    public void notificar(String evento) {
-    	this.getSuscriptores().stream().forEach(s -> s.actualizar(evento));
+    public void notificarInicioDeEstacionamiento(Estacionamiento estacionamiento) {
+    	this.getSuscriptores().stream().forEach(s -> s.actualizarInicioDeEstacionamiento(estacionamiento));
+    }
+    
+    public void notificarFinDeEstacionamiento(Estacionamiento estacionamiento) {
+    	this.getSuscriptores().stream().forEach(s -> s.actualizarFinDeEstacionamiento(estacionamiento));
+    }
+    
+    public void notificarRecargaDeCelular(Compra compra) {
+    	this.getSuscriptores().stream().forEach(s -> s.actualizarRecargaDeCelular(compra));
     }
     
 	//Estacionamiento
@@ -68,7 +77,7 @@ public class Sem implements INotificador {
                 Estacionamiento nuevoEstacionamiento = new EstacionamientoPorApp(usuario.getPatente(), inicio, fin, celular);
                 this.getEstacionamientos().add(nuevoEstacionamiento);
 
-                notificar("Se inicio el estacionamiento para la patente: " + usuario.getPatente());
+                notificarInicioDeEstacionamiento(nuevoEstacionamiento);
                 usuario.recibirInformacionDeEstacionamiento("La hora de inicio del estacionamiento es: " + inicio + 
                                                             ", su saldo alcanza para tener activo el estacionamiento hasta las: " + fin);
             } else {
@@ -93,7 +102,7 @@ public class Sem implements INotificador {
 			
 			Estacionamiento nuevoEstacionamiento = new EstacionamientoPorCompraPuntual (patente, inicio, fin, cantidadDeHsCompradas);
 			this.getEstacionamientos().add(nuevoEstacionamiento);
-			notificar("Se inicio el estacionamiento para la patente: " + patente);
+			notificarInicioDeEstacionamiento(nuevoEstacionamiento);
 		} else {
 			System.out.println("El usuario ya tiene un estacionamiento activo o el horario esta fuera de la franja horaria");
 		}
@@ -112,7 +121,7 @@ public class Sem implements INotificador {
     	this.getEstacionamientos().remove(estacionamiento);
     	
     	
-    	notificar("Se finalizo el estacionamiento para la patente: " + usuario.getPatente());
+    	notificarFinDeEstacionamiento(estacionamiento);
     	usuario.recibirInformacionDeEstacionamiento("La hora de inicio del estacionamiento fue: " + horaInicio + 
 													", la hora de fin del estacionamiento fue: " + horaFin +
 													", la duracion en horas del estacionamiento fue: " + duracionDelEstacionamiento +
@@ -122,7 +131,7 @@ public class Sem implements INotificador {
 	public void finalizarEstacionamiento(String patente) {
     	Estacionamiento estacionamiento = estacionamientoDePatente(patente);
     	this.getEstacionamientos().remove(estacionamiento);
-    	notificar("Se finalizo el estacionamiento para la patente: " + patente);
+    	notificarFinDeEstacionamiento(estacionamiento);
     } 
 	
 	public void verificarSiCaducaronLosEstacionamientosYSiEsAsiFinalizarlos() {
@@ -176,18 +185,18 @@ public class Sem implements INotificador {
     
 	//Recarga Celular
 	
-	public void recargarSaldo(String celular, double monto) {
+	public void recargarSaldo(String celular, double monto, Compra compra) {
 		AppUsuario usuario = buscarUsuarioPorCelular(celular);
 		usuario.recargarSaldo(monto);
 		
-		notificar("Se recargo saldo para el celular: " + celular + "por un monto de: " + monto );
+		notificarRecargaDeCelular(compra);
 	}
 	
 	public void descontarSaldo(String celular, double monto) {
 		AppUsuario usuario = buscarUsuarioPorCelular(celular);
-		usuario.descontarSaldo(monto);
+		usuario.descontarSaldo(monto)
 		
-		notificar("Se desconto saldo para el celular: " + celular + "por un monto de: " + monto );
+		;	
 	}
 	
 	public AppUsuario buscarUsuarioPorPatente(String patente) {

@@ -28,7 +28,7 @@ public class PuntoDeVenta {
     public void RecargaCelular(String celular, double monto) {
     	Compra compra = new RecargaCelular(this, LocalDate.now(), LocalTime.now(), monto);
     	comprasRealizadas.add(compra);
-    	sem.recargarSaldo(celular, monto);
+    	sem.recargarSaldo(celular, monto, compra);
     }
     
     public void CompraEstacionamiento(String patente, int horasCompradas) {

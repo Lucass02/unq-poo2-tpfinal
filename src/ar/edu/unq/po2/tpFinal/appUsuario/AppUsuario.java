@@ -113,4 +113,5 @@ public class AppUsuario implements MovementSensor{
 	public ZonaDeEstacionamiento getZona() {
 		return this.zona;
 	}
+	
 }

@@ -24,6 +24,7 @@ public class ZonaDeEstacionamientoTestCase {
 	
 	@BeforeEach
     public void setUp() {
+		
     	zona = new ZonaDeEstacionamiento("Bernal");
     	punto = mock(PuntoDeVenta.class);
     	inspector = mock(InspectorApp.class);
@@ -32,6 +33,7 @@ public class ZonaDeEstacionamientoTestCase {
     
     @Test
     public void seLeAsignaUnaZonaAUnInspector() {
+    	
     	// Excercise
     	zona.agregarInspector(inspector);
     	// Verify

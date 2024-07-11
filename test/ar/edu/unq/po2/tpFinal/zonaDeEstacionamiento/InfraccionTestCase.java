@@ -30,9 +30,13 @@ class InfraccionTestCase {
 	
 	@BeforeEach
 	public void SetUp() {
+		
 		patente = "ABC123";
+		
 		inspector = new InspectorApp("Pepe");
+		
 		zona = new ZonaDeEstacionamiento("Bernal");
+		
 		zona.agregarInspector(inspector);
 		
 		infraccion = new Infraccion(inspector,patente);
@@ -43,19 +47,27 @@ class InfraccionTestCase {
 		// Verify
 		assertEquals(infraccion.getFechaHora().getHour(),LocalDateTime.now().getHour());
 	}
+	
+	
 	@Test
 	void seObtieneLaPatente() {
 		// Verify
 		assertEquals(infraccion.getPatente(),patente);
 	}
+	
+	
 	@Test
 	void seObtieneLaZona() {
 		// Verify
 		assertEquals(infraccion.getZona().getUbicacion(),"Bernal");
 	}
+	
+	
 	@Test
 	void seObtieneElInspector() {
 		// Verify
 		assertEquals(infraccion.getInspector(),inspector);
 	}
+	
+	
 }

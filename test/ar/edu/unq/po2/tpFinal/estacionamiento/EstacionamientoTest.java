@@ -19,6 +19,7 @@ public class EstacionamientoTest {
 	private LocalTime horaFin;
 	private Sem sem;
 	private AppUsuario usuario;
+	private EstacionamientoPorCompraPuntual est;
 	
 	
 	
@@ -30,7 +31,9 @@ public class EstacionamientoTest {
 		usuario = mock(AppUsuario.class);
 		estacionamientoApp = new EstacionamientoPorApp("ABC123", horaInicio, horaFin, usuario);
 		estacionamientoPuntual = new EstacionamientoPorCompraPuntual("DEF456", horaInicio, horaFin, 2);
+		est = new EstacionamientoPorCompraPuntual("DEF456", horaInicio, horaFin, 2);
 	}
+	
 	
 	/*Test estacionamiento puntual*/
 	@Test
@@ -38,6 +41,7 @@ public class EstacionamientoTest {
 		// Verify
 		assertEquals(estacionamientoApp.getInicio().getHour(),10);
 	}
+	
 	
 	@Test
 	void seFinalizaUnEstacionamientoPuntual() { 
@@ -47,10 +51,19 @@ public class EstacionamientoTest {
 		verify(sem).finalizarEstacionamiento(estacionamientoPuntual.getPatente());
 	}
 	
+	
 	@Test
 	void seObtieneLaHoraFin() { 
 		// Verify
+		
 		assertEquals(estacionamientoPuntual.getFin().getHour(),12);
+	}
+	
+	@Test
+	void seObtieneLaCantidadDeHorasCompradasEnUnEstacionamientoPuntual() { 
+		// Verify
+		
+		assertEquals(est.getCantidadDeHsCompradas(),2);
 	}
 	
 	/*Test estacionamiento App*/
@@ -60,6 +73,7 @@ public class EstacionamientoTest {
 		assertEquals(estacionamientoPuntual.getInicio().getHour(),10);
 	}
 	
+	
 	@Test
 	void seFinalizaUnEstacionamientoApp() { 
 		// Excercise
@@ -67,4 +81,5 @@ public class EstacionamientoTest {
 		// Verify
 		verify(sem).finalizarEstacionamientoPorApp(usuario);
 	} 
+	
 }

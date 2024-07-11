@@ -168,7 +168,7 @@ public class Sem implements INotificador {
     	return this.getEstacionamientos().stream()
     								  .filter(e -> e.getPatente().equals(patente))
     								  .findFirst()
-    								  .orElseThrow(() -> new RuntimeException("No se encontró un Estacionamiento con el usuario dado."));
+    								  .orElseThrow(() -> new RuntimeException("No se encontró un Estacionamiento con la patente dada."));
     }
 
 	private LocalDateTime obtenerFinMasTempranoEnDias(LocalDateTime finSegunSaldo) {

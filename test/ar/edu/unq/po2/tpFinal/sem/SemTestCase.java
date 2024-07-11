@@ -2,6 +2,7 @@ package ar.edu.unq.po2.tpFinal.sem;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -33,6 +34,7 @@ public class SemTestCase {
 	private Estacionamiento estacionamientoMock;
 	private Infraccion infraccion;
 	private Compra compra;
+	private ISuscriptor suscriptor;
 	
 	
     @BeforeEach
@@ -44,6 +46,7 @@ public class SemTestCase {
     	zonaMock2 = mock(ZonaDeEstacionamiento.class);
     	estacionamientoMock = mock(Estacionamiento.class);
     	compra = mock(Compra.class);
+    	suscriptor = mock(ISuscriptor.class);
     	
          when(usuarioMock.getCelular()).thenReturn("1124831610");
          when(usuarioMock.getPatente()).thenReturn("AAA111");
@@ -52,6 +55,7 @@ public class SemTestCase {
          when(zonaMock.getUbicacion()).thenReturn("Bernal");
          when(zonaMock2.getUbicacion()).thenReturn("Quilmes");
          
+         sem.suscribir(suscriptor);
          sem.agregarAppUsuario(usuarioMock);
          sem.agregarZona(zonaMock);
     }
@@ -187,11 +191,33 @@ public class SemTestCase {
         
         verify(usuarioMock, times(1)).descontarSaldo(20.0);
     }
+    
     @Test
     public void testRegistrarInfraccion() {
         sem.registrarInfraccion(infraccion);
         
         assertEquals(sem.getInfracciones().size(),1);
+    }
+    
+    @Test
+    public void testBuscarUnUsuarioPorPatente() {
+      
+        
+        assertEquals(usuarioMock.getCelular(),sem.buscarUsuarioPorPatente("AAA111").getCelular());
+    }
+    
+    @Test
+    public void testPatenteDesconocida() {
+    	RuntimeException exception = assertThrows(RuntimeException.class, () -> sem.buscarUsuarioPorPatente("ZZZ999"));
+        
+        assertEquals("No se encontró un Usuario con la patente dada", exception.getMessage());
+    }
+    
+    @Test
+    public void testPatenteInexistente() {
+    	RuntimeException exception = assertThrows(RuntimeException.class, () -> sem.estacionamientoDePatente("ZZZ999"));
+        
+        assertEquals("No se encontró un Estacionamiento con la patente dada.", exception.getMessage());
     }
 }
 

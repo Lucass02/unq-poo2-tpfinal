@@ -29,6 +29,7 @@ class PuntoDeVentaTest {
 		puntoDeVenta = new PuntoDeVenta (1,zona, sem);
 	}
 	
+	
 	@Test
 	public void testSeRealizanCompras() {
 		puntoDeVenta.CompraEstacionamiento("AAA111", 2);
@@ -37,6 +38,7 @@ class PuntoDeVentaTest {
 		assertEquals(2, puntoDeVenta.getComprasRealizadas().size());
 	}
 
+	
 	@Test
 	public void testRegistrarRecargaCelular() {
 		puntoDeVenta.RecargaCelular("11123456", 200);
@@ -50,14 +52,20 @@ class PuntoDeVentaTest {
 		
 		verify(sem).iniciarEstacionamientoCompraPuntual(zona, "AAA111", 2);
 	}
+	
+	
 	@Test
 	public void obtenerZona() {
 		assertEquals(zona, puntoDeVenta.getZona());
 	}
+	
+	
 	@Test
 	public void obtenerId() {
 		assertEquals(1, puntoDeVenta.getId());
 	}
+	
+	
 	@Test
 	public void obtenerSem() {
 		assertEquals(sem, puntoDeVenta.getSem());

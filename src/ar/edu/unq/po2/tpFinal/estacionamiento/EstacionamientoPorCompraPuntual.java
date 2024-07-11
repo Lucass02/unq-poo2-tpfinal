@@ -24,4 +24,5 @@ public class EstacionamientoPorCompraPuntual extends Estacionamiento {
 	public int getCantidadDeHsCompradas() {
 		return cantidadDeHsCompradas;
 	}
+	
 }

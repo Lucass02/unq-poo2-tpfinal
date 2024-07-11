@@ -35,6 +35,7 @@ class RecargaCelularTest {
         mockPuntoDeVenta = mock(PuntoDeVenta.class);
         mockSem = mock(Sem.class);
         
+        
         when(mockPuntoDeVenta.getSem()).thenReturn(mockSem);
         
         recargaCelular = new RecargaCelular(mockPuntoDeVenta , fecha, hora, monto);

@@ -62,8 +62,8 @@ public class Sem implements INotificador {
     
 	//Estacionamiento
     
-    public void iniciarEstacionamientoApp(String celular) {
-        AppUsuario usuario = this.buscarUsuarioPorCelular(celular);
+    public void iniciarEstacionamientoApp(AppUsuario usuario) {
+
         if (usuario.getSaldo() > 0) {
             if (estaLaZonaAEstacionarDentroDeLasZonasDelSem(usuario.getZona()) && !estacionamientoVigente(usuario.getPatente()) && esFranjaHoraria()) {
                 double horasMaximasSegunSaldo = (usuario.getSaldo() / this.getPrecioEstacionamientoPorHora());
@@ -74,7 +74,7 @@ public class Sem implements INotificador {
                 finEnDias = obtenerFinMasTempranoEnDias(finSegunSaldo);
                 LocalTime fin = finEnDias.toLocalTime();
 
-                Estacionamiento nuevoEstacionamiento = new EstacionamientoPorApp(usuario.getPatente(), inicio, fin, celular);
+                Estacionamiento nuevoEstacionamiento = new EstacionamientoPorApp(usuario.getPatente(), inicio, fin, usuario);
                 this.getEstacionamientos().add(nuevoEstacionamiento);
 
                 notificarInicioDeEstacionamiento(nuevoEstacionamiento);
@@ -108,8 +108,7 @@ public class Sem implements INotificador {
 		}
 	}
 	
-	public void finalizarEstacionamientoPorApp(String celular) {
-		AppUsuario usuario = this.buscarUsuarioPorCelular(celular);
+	public void finalizarEstacionamientoPorApp(AppUsuario usuario) {
     	Estacionamiento estacionamiento = estacionamientoDePatente(usuario.getPatente());
     	
     	LocalTime horaActual = reloj.obtenerHoraActual();

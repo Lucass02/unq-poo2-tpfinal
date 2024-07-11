@@ -5,6 +5,7 @@ import java.time.LocalTime;
 
 
 public class CompraPuntual extends Compra {
+	
     private int cantidadDeHsCompradas;
 
     //Constructor
@@ -17,7 +18,7 @@ public class CompraPuntual extends Compra {
 
 	//Getters y Setters
 	
-	public double getCantidadDeHsCompradas() {
+	public int getCantidadDeHsCompradas() {
 		return cantidadDeHsCompradas;
 	}
 	

@@ -2,29 +2,30 @@ package ar.edu.unq.po2.tpFinal.estacionamiento;
 
 import java.time.LocalTime;
 
+import ar.edu.unq.po2.tpFinal.appUsuario.AppUsuario;
 import ar.edu.unq.po2.tpFinal.sem.Sem;
 
 public class EstacionamientoPorApp extends Estacionamiento {
 
-	private String celular;
+	private AppUsuario usuario;
 
 	//Constructor
 	
-	public EstacionamientoPorApp(String patente, LocalTime inicio, LocalTime fin, String celular) {
+	public EstacionamientoPorApp(String patente, LocalTime inicio, LocalTime fin, AppUsuario usuario) {
 		super(patente, inicio, fin);
-		this.celular = celular;
+		this.usuario = usuario;
 	}
 	
 	//Methods
 	
 	@Override
 	public void finalizarEstacionamiento(Sem sem) {
-		sem.finalizarEstacionamientoPorApp(this.getCelular());
+		sem.finalizarEstacionamientoPorApp(this.getUsuario());
 	}
 	
 	//Getters y Setters
 	
-	public String getCelular() {
-		return celular;
+	public AppUsuario getUsuario() {
+		return usuario;
 	}
 }

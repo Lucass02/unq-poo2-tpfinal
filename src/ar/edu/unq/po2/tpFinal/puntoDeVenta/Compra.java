@@ -13,7 +13,7 @@ public abstract class Compra {
 	//Constructor
 	
 	public Compra(PuntoDeVenta puntoDeVenta, LocalDate fecha, LocalTime hora) {
-		this.numeroControl += 1;
+		this.numeroControl =+1 ;
 		this.puntoDeVenta = puntoDeVenta;
 		this.fecha = fecha;
 		this.hora = hora;

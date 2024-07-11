@@ -14,6 +14,7 @@ import java.time.LocalTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ar.edu.unq.po2.tpFinal.puntoDeVenta.PuntoDeVenta;
 import ar.edu.unq.po2.tpFinal.sem.Reloj;
 import ar.edu.unq.po2.tpFinal.sem.Sem;
 import ar.edu.unq.po2.tpFinal.zonaDeEstacionamiento.ZonaDeEstacionamiento;
@@ -23,42 +24,46 @@ public class AppUsuarioTest {
 	private AppUsuario usuario;
 	private ZonaDeEstacionamiento zona;
 	private Reloj reloj;
+	private PuntoDeVenta puntoVenta;
 	
     @BeforeEach
     public void setUp() throws Exception {
     	reloj = mock(Reloj.class);
         sem = new Sem(reloj);
-        zona = mock(ZonaDeEstacionamiento.class);
-        when(zona.getUbicacion()).thenReturn("Bernal");
+        zona = new ZonaDeEstacionamiento("Bernal");
         usuario = new AppUsuario("1154534248", "SDA346", new ModoManual(), zona, sem, new AsistenciaDesactivada());
+        puntoVenta = new PuntoDeVenta(100, zona, sem);
     }
         
 	@Test
 	public void testRecargarSaldoValido() {
         sem.agregarAppUsuario(usuario);
-		sem.recargarSaldo(1500, "SDA346");
+		puntoVenta.RecargaCelular(usuario.getCelular(), 2000);
 		
-		assertEquals(usuario.getSaldo(), 1500);
+		assertEquals(usuario.getSaldo(), 2000);
 	}
 	
+	  
 	@Test
 	public void testRecargarSaldoInvalido() throws Exception {
-	    RuntimeException exception = assertThrows(RuntimeException.class, () -> sem.recargarSaldo(1500, "SDA346"));
-	    assertEquals("No se encontró un Usuario con la patente dada", exception.getMessage());
-	}
-	
-	@Test
-	public void testFinalizarEstacionamientoDeUsuarioInvalido() throws Exception {
-	    RuntimeException exception = assertThrows(RuntimeException.class, () -> usuario.finalizarEstacionamiento());
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> puntoVenta.RecargaCelular(usuario.getCelular(), 2000));
+		
 	    assertEquals("No se encontró un Usuario con el celular dado", exception.getMessage());
-	}
+	} 
+	
+
+
+	
+	
+	
+	
 	
 	@Test
 	public void testDescontarSaldo() {
         sem.agregarAppUsuario(usuario);
-		sem.recargarSaldo(1500, "SDA346"); 
-		sem.descontarSaldo(400, "SDA346"); 
-		
+        puntoVenta.RecargaCelular(usuario.getCelular(), 2000);
+		usuario.descontarSaldo(900);
+        
 		assertEquals(usuario.getSaldo(), 1100);
 	}
 	
@@ -70,24 +75,39 @@ public class AppUsuarioTest {
         
         sem.agregarZona(zona);
         sem.agregarAppUsuario(usuario);
-        sem.recargarSaldo(1500, "SDA346");
+        puntoVenta.RecargaCelular(usuario.getCelular(), 2000);
         usuario.iniciarEstacionamiento();
         
         assertTrue(sem.estacionamientoVigente("SDA346"));
     }
 	
     @Test
-    public void testIniciarEstacionamientoInvalido() {
+    public void testIniciarEstacionamientoFueraDeHorario() {
         when(reloj.obtenerHoraActual()).thenReturn(LocalTime.of(23, 0)); 
         when(reloj.obtenerFechaActual()).thenReturn(LocalDate.of(2024, 6, 13)); 
         when(reloj.obtenerFechaYHoraActual()).thenReturn(LocalDateTime.of(2024, 6, 13, 23, 0)); 
         
         sem.agregarZona(zona);
         sem.agregarAppUsuario(usuario);
-        sem.recargarSaldo(1500, "SDA346");
+        puntoVenta.RecargaCelular(usuario.getCelular(), 2000);
         usuario.iniciarEstacionamiento();
         
         assertFalse(sem.estacionamientoVigente("SDA346"));
+    }
+    
+    @Test
+    public void testIniciarEstacionamientoYaIniciado() {
+    	when(reloj.obtenerHoraActual()).thenReturn(LocalTime.of(16, 0)); 
+        when(reloj.obtenerFechaActual()).thenReturn(LocalDate.of(2024, 6, 13)); 
+        when(reloj.obtenerFechaYHoraActual()).thenReturn(LocalDateTime.of(2024, 6, 13, 16, 0));
+        
+        sem.agregarZona(zona);
+        sem.agregarAppUsuario(usuario);
+        puntoVenta.RecargaCelular(usuario.getCelular(), 2000);
+        usuario.iniciarEstacionamiento();
+        usuario.iniciarEstacionamiento();
+        
+        assertEquals(1, sem.getEstacionamientos().size());
     }
     
     @Test
@@ -98,7 +118,7 @@ public class AppUsuarioTest {
         
         sem.agregarZona(zona);
         sem.agregarAppUsuario(usuario);
-        sem.recargarSaldo(1500, "SDA346");
+        puntoVenta.RecargaCelular(usuario.getCelular(), 2000);
         usuario.iniciarEstacionamiento();
         
         when(reloj.obtenerHoraActual()).thenReturn(LocalTime.of(19, 0)); 
@@ -108,20 +128,21 @@ public class AppUsuarioTest {
         usuario.finalizarEstacionamiento();
         
         assertEquals(0, sem.getEstacionamientos().size());
-        assertEquals(usuario.getSaldo(), 1380);
+        assertEquals(usuario.getSaldo(), 1880);
     }
 	
     @Test
-    public void testFinalizarEstacionamientoInvalido() throws Exception {
+    public void testFinalizarEstacionamientoInvalido() {
         when(reloj.obtenerHoraActual()).thenReturn(LocalTime.of(16, 0)); 
         when(reloj.obtenerFechaActual()).thenReturn(LocalDate.of(2024, 6, 13)); 
         when(reloj.obtenerFechaYHoraActual()).thenReturn(LocalDateTime.of(2024, 6, 13, 16, 0)); 
         
         sem.agregarZona(zona);
         sem.agregarAppUsuario(usuario);
-        sem.recargarSaldo(1500, "SDA346");
+        puntoVenta.RecargaCelular(usuario.getCelular(), 2000);
         
-        assertThrows(RuntimeException.class, () -> usuario.finalizarEstacionamiento());
+        usuario.finalizarEstacionamiento();
+        assertEquals(0, sem.getEstacionamientos().size());
     }
 	    
     @Test
@@ -134,7 +155,7 @@ public class AppUsuarioTest {
         
         sem.agregarZona(zona);
         sem.agregarAppUsuario(usuario);
-        sem.recargarSaldo(1500, "SDA346");
+        puntoVenta.RecargaCelular(usuario.getCelular(), 2000);
         
     	usuario.walking();
         
@@ -151,7 +172,7 @@ public class AppUsuarioTest {
         
         sem.agregarZona(zona);
         sem.agregarAppUsuario(usuario);
-        sem.recargarSaldo(1500, "SDA346");
+        puntoVenta.RecargaCelular(usuario.getCelular(), 2000);
         
     	usuario.walking();
     	
@@ -162,7 +183,7 @@ public class AppUsuarioTest {
         usuario.driving();
         
         assertEquals(0, sem.getEstacionamientos().size());
-        assertEquals(usuario.getSaldo(), 1420);
+        assertEquals(usuario.getSaldo(), 1920);
     }
     
     @Test
@@ -173,7 +194,7 @@ public class AppUsuarioTest {
     	  
         sem.agregarZona(zona);
         sem.agregarAppUsuario(usuario);
-        sem.recargarSaldo(1500, "SDA346");
+        puntoVenta.RecargaCelular(usuario.getCelular(), 2000);
         
     	usuario.walking();
     	
@@ -184,7 +205,7 @@ public class AppUsuarioTest {
         usuario.driving();
         
         assertEquals(0, sem.getEstacionamientos().size());
-        assertEquals(usuario.getSaldo(), 1500);
+        assertEquals(usuario.getSaldo(), 2000);
     }
     @Test
     public void testWalkingConEstacionamientoIniciadoModoAutomatico() {
@@ -196,7 +217,7 @@ public class AppUsuarioTest {
         
         sem.agregarZona(zona);
         sem.agregarAppUsuario(usuario);
-        sem.recargarSaldo(1500, "SDA346");
+        puntoVenta.RecargaCelular(usuario.getCelular(), 2000);
         
     	usuario.walking();
     	
@@ -218,7 +239,7 @@ public class AppUsuarioTest {
         
         sem.agregarZona(zona);
         sem.agregarAppUsuario(usuario);
-        sem.recargarSaldo(1500, "SDA346");
+        puntoVenta.RecargaCelular(usuario.getCelular(), 2000);
         
     	usuario.driving();
     	
@@ -240,7 +261,7 @@ public class AppUsuarioTest {
     	
     	sem.agregarZona(zona);
         sem.agregarAppUsuario(usuario);
-        sem.recargarSaldo(1500, "SDA346");
+        puntoVenta.RecargaCelular(usuario.getCelular(), 2000);
         
     	usuario.iniciarEstacionamiento();
     	System.out.println("Empiezo a manejar");
@@ -248,6 +269,7 @@ public class AppUsuarioTest {
     	
     	assertEquals(1, sem.getEstacionamientos().size());
     }
+    
     @Test
     public void testAsistenciaActivadaWalking() {
     	when(reloj.obtenerHoraActual()).thenReturn(LocalTime.of(16, 0)); 
@@ -257,9 +279,9 @@ public class AppUsuarioTest {
     	
     	sem.agregarZona(zona);
         sem.agregarAppUsuario(usuario);
-        sem.recargarSaldo(1500, "SDA346");
         
     	System.out.println("Empiezo a caminar");
+    	usuario.walking();
     	usuario.walking();
     	
     	assertEquals(0, sem.getEstacionamientos().size());

@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ar.edu.unq.po2.tpFinal.appUsuario.AppUsuario;
 import ar.edu.unq.po2.tpFinal.sem.Sem;
 
 public class EstacionamientoTest {
@@ -17,6 +18,7 @@ public class EstacionamientoTest {
 	private LocalTime horaInicio;
 	private LocalTime horaFin;
 	private Sem sem;
+	private AppUsuario usuario;
 	
 	
 	
@@ -25,10 +27,11 @@ public class EstacionamientoTest {
 		horaInicio = LocalTime.of(10, 0);
 		horaFin = LocalTime.of(12, 0);
 		sem = mock(Sem.class);
-		
-		estacionamientoApp = new EstacionamientoPorApp("ABC123", horaInicio, horaFin, "1101234");
+		usuario = mock(AppUsuario.class);
+		estacionamientoApp = new EstacionamientoPorApp("ABC123", horaInicio, horaFin, usuario);
 		estacionamientoPuntual = new EstacionamientoPorCompraPuntual("DEF456", horaInicio, horaFin, 2);
 	}
+	
 	/*Test estacionamiento puntual*/
 	@Test
 	void seIniciaUnEstacionamientoPuntual() {
@@ -43,6 +46,7 @@ public class EstacionamientoTest {
 		// Verify
 		verify(sem).finalizarEstacionamiento(estacionamientoPuntual.getPatente());
 	}
+	
 	@Test
 	void seObtieneLaHoraFin() { 
 		// Verify
@@ -61,6 +65,6 @@ public class EstacionamientoTest {
 		// Excercise
 		estacionamientoApp.finalizarEstacionamiento(sem);
 		// Verify
-		verify(sem).finalizarEstacionamientoPorApp("1101234");
+		verify(sem).finalizarEstacionamientoPorApp(usuario);
 	} 
 }

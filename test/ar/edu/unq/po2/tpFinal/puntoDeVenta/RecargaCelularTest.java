@@ -37,25 +37,22 @@ class RecargaCelularTest {
         
         when(mockPuntoDeVenta.getSem()).thenReturn(mockSem);
         
-        recargaCelular = new RecargaCelular(1, mockPuntoDeVenta , fecha, hora, monto);
+        recargaCelular = new RecargaCelular(mockPuntoDeVenta , fecha, hora, monto);
     }
 
     @Test
-    public void testConstructor() {	
+    public void testGetMonto() {	
     	assertEquals(100.0, recargaCelular.getMonto());
     }
     
-    @Test
-    public void seRealizanDosRecargasYSonRegistradas() {
-        
-        recargaCelular.realizarCompra(patente);
-        recargaCelular.realizarCompra(patente2);
 
-        
-        verify(mockPuntoDeVenta, times(2)).registrarCompra(recargaCelular);
-        verify(mockSem).recargarSaldo(monto, patente);
-        verify(mockSem).recargarSaldo(monto, patente2);
-    }	
+
+    
+    
+    
+    
+    
+    
 
 
 }

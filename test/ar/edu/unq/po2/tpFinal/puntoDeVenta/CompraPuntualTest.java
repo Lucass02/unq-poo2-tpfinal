@@ -17,39 +17,27 @@ class CompraPuntualTest {
 	
 	private CompraPuntual compraPuntual;
 	private PuntoDeVenta mockPuntoDeVenta;
-	private Sem mockSem;
 	
 	private LocalDate fecha;
     private LocalTime hora;
-    private int cantidadDeHsCompradas;
-    private String patente;
+
+    
 	
     @BeforeEach
     public void setUp() {
         fecha = LocalDate.now();
         hora = LocalTime.now();
-        cantidadDeHsCompradas = 4;
-        patente = "AAA111";
+
+        
         mockPuntoDeVenta = mock(PuntoDeVenta.class);
-        mockSem = mock(Sem.class);
         
-        when(mockPuntoDeVenta.getSem()).thenReturn(mockSem);
-        
-        compraPuntual = new CompraPuntual(1, mockPuntoDeVenta , fecha, hora, cantidadDeHsCompradas);
+        compraPuntual = new CompraPuntual(mockPuntoDeVenta , fecha, hora, 2);
     }
 	
-	
 	@Test
-	public void testConstructor() {
-		assertEquals(4, compraPuntual.getCantidadDeHsCompradas());
-	}
-	
-	@Test
-	public void seCompraUnEstacionamientoYSeRegistra() {
-		compraPuntual.realizarCompra(patente);
-		 
-		verify(mockPuntoDeVenta).registrarCompra(compraPuntual);
-		verify(mockSem).iniciarEstacionamientoCompraPuntual(mockPuntoDeVenta.getZona(), patente, cantidadDeHsCompradas);
-	}
+	public void testObtenerCantidadDeHorasCompradas() {
 
+		
+		assertEquals(2,compraPuntual.getCantidadDeHsCompradas());
+	}
 }

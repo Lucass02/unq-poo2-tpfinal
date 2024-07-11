@@ -21,15 +21,36 @@ public class CompraTest {
 		fecha = LocalDate.of(2024, 6, 13);
 		hora = LocalTime.of(13, 15);
 		puntoDeVentaMock = mock(PuntoDeVenta.class);
-		
-		compra = new CompraPuntual(2, puntoDeVentaMock, fecha, hora, 7);
+		compra = new CompraPuntual(puntoDeVentaMock, fecha, hora, 7);
 	}
 	
 	@Test
-	public void testConstructor() {
-	    assertEquals(2, compra.getNumeroControl());
+	public void testGetNumeroDeControl() {
+	    assertEquals(1, compra.getNumeroControl());
+	    
+	    
+	    
+	}
+	
+	@Test
+	public void testGetPuntoDeVenta() {
 	    assertEquals(puntoDeVentaMock, compra.getPuntoDeVenta());
+
+
+	}
+	
+	@Test
+	public void testGetFecha() {
 	    assertEquals(fecha, compra.getFecha());
+
+
+	    
+	}
+	
+	@Test
+	public void testGetHora() {
 	    assertEquals(hora, compra.getHora());
+	    
+	    
 	}
 }
